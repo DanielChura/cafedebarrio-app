@@ -12,6 +12,9 @@
         "@schematics/angular:component": {
           "skipTests": true,
           "inlineStyle": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
         }
       },
       "root": "",
@@ -57,6 +60,9 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          },
           "configurations": {
             "production": {
               "buildTarget": "cafedebarrio-app:build:production"

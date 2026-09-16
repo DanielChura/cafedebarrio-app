@@ -1,0 +1,26 @@
+<main class="flex flex-col gap-12 py-8 pb-24">
+  <app-promo-banner
+    title="Café de especialidad, directo de tu barrio."
+    description="Explora por categoría o revisa todo el menú."
+    ctaLabel="Ver catálogo"
+    ctaLink="/catalog"
+  />
+
+  <app-category-row [category]="hotDrinks" />
+  <app-category-row [category]="coldDrinks" />
+
+  <app-promo-banner
+    title="¿Ya tienes tu favorito?"
+    description="Crea tu cuenta y pide más rápido la próxima vez."
+    ctaLabel="Crear cuenta"
+    ctaLink="/register"
+  />
+
+  @for (c of (featured.value()?.content ?? []).slice(0, 2); track c.id) {
+    <app-category-row [category]="c" />
+  }
+
+  @for (c of (featured.value()?.content ?? []).slice(0, 2); track c.id) {
+    <app-category-row [category]="c" />
+  }
+</main>

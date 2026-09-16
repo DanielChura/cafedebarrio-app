@@ -1,0 +1,20 @@
+@if ((items.value()?.content ?? []).length > 0) {
+  <section class="flex flex-col gap-6" [attr.aria-labelledby]="'cat-' + category().id">
+    <div class="flex items-center justify-between gap-6">
+      <h2 [id]="'cat-' + category().id" class="text-xl text-neutral-900 font-medium">
+        {{ category().name }}
+      </h2>
+      <a
+        routerLink="/catalog"
+        [attr.aria-label]="'Ver todo de ' + category().name"
+        class="text-sm text-orange-500"
+        >Ver todo</a
+      >
+    </div>
+    <div class="flex gap-6 overflow-x-auto">
+      @for (p of items.value()?.content ?? []; track p.id) {
+        <app-product-card [product]="p" class="w-40 shrink-0 flex-1" />
+      }
+    </div>
+  </section>
+}
