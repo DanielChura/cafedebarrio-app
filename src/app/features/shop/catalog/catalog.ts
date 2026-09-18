@@ -19,12 +19,13 @@ export class Catalog {
   readonly items = signal<ProductResponse[]>([]);
   readonly allCategories = signal<CategoryResponse[]>([]);
   readonly loading = signal(true);
-  readonly failed = signal(false);
+  readonly error = signal(false);
   readonly categoryId = signal<string | undefined>(undefined);
 
   constructor() {
     this.categories.findAll({ size: 50 }).subscribe({
       next: (page) => this.allCategories.set(page.content),
+      error: () => this.error.set(true),
     });
 
     this.route.queryParamMap.subscribe((params) => {
@@ -45,7 +46,7 @@ export class Catalog {
 
   private loadProducts(search: string, categoryId?: string): void {
     this.loading.set(true);
-    this.failed.set(false);
+    this.error.set(false);
     this.products.findAll({ name: search, categoryId, onlyActive: true, size: 50 }).subscribe({
       next: (page) => {
         this.items.set(page.content);
@@ -53,7 +54,7 @@ export class Catalog {
       },
       error: () => {
         this.loading.set(false);
-        this.failed.set(true);
+        this.error.set(true);
       },
     });
   }

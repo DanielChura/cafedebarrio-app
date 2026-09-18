@@ -7,10 +7,11 @@ import { UserService } from '../../../core/services/user';
   templateUrl: './admin-users.html',
 })
 export class AdminUsers {
-  private readonly api = inject(UserService);
+  private readonly users = inject(UserService);
 
   readonly items = signal<UserResponse[]>([]);
   readonly loading = signal(true);
+  readonly error = signal(false);
 
   constructor() {
     this.load();
@@ -18,16 +19,20 @@ export class AdminUsers {
 
   load(): void {
     this.loading.set(true);
-    this.api.findAll({ size: 50 }).subscribe({
+    this.error.set(false);
+    this.users.findAll({ size: 50 }).subscribe({
       next: (page) => {
-        this.items.set(page.content ?? []);
+        this.items.set(page.content);
         this.loading.set(false);
       },
-      error: () => this.loading.set(false),
+      error: () => {
+        this.loading.set(false);
+        this.error.set(true);
+      },
     });
   }
 
   remove(id: string): void {
-    this.api.delete(id).subscribe({ next: () => this.load() });
+    this.users.delete(id).subscribe({ next: () => this.load() });
   }
 }

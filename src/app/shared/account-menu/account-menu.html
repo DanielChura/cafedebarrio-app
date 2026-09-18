@@ -1,30 +1,23 @@
 <div
-  id="account-menu"
-  role="menu"
-  aria-label="Órdenes y cuenta"
-  class="absolute right-0 top-full mt-2 flex w-48 flex-col gap-1 rounded-2xl bg-white shadow-2xl p-2"
+  class="absolute right-0 top-full mt-2 flex w-48 flex-col gap-1 rounded-2xl bg-white p-2 text-neutral-500"
 >
   <a
     routerLink="/my-orders"
-    role="menuitem"
     (click)="closed.emit()"
-    class="rounded-2xl px-4 py-2 text-sm"
+    class="rounded-2xl px-4 py-2 text-sm hover:text-neutral-900"
     >Mis pedidos</a
   >
   @if (isAdmin) {
     <a
       routerLink="/admin/products"
-      role="menuitem"
       (click)="closed.emit()"
-      class="rounded-2xl px-4 py-2 text-sm"
+      class="rounded-2xl px-4 py-2 text-sm hover:text-neutral-900"
       >Productos</a
     >
   }
   <button
-    type="button"
-    role="menuitem"
     (click)="logout()"
-    class="cursor-pointer rounded-2xl px-4 py-2 text-left text-sm text-neutral-500"
+    class="cursor-pointer rounded-2xl px-4 py-2 text-left text-sm hover:text-neutral-900"
   >
     Cerrar sesión
   </button>

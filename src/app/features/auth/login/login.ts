@@ -15,6 +15,7 @@ export class Login {
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
   readonly error = signal('');
+  readonly loading = signal(false);
 
   readonly form = this.formBuilder.group({
     email: ['', [Validators.required, Validators.email]],
@@ -30,12 +31,16 @@ export class Login {
     const formValue = this.form.getRawValue();
     const request: LoginRequest = { email: formValue.email.trim(), password: formValue.password };
     this.error.set('');
+    this.loading.set(true);
     this.auth.login(request).subscribe({
       next: (response) => {
         this.auth.saveSession(response);
         this.router.navigateByUrl('/');
       },
-      error: () => this.error.set('No pudimos iniciar sesión. Revisa tus datos.'),
+      error: () => {
+        this.loading.set(false);
+        this.error.set('No pudimos iniciar sesión. Revisa tus datos.');
+      },
     });
   }
 }

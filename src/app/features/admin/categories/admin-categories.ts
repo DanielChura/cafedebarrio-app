@@ -9,10 +9,11 @@ import { CategoryService } from '../../../core/services/category';
   templateUrl: './admin-categories.html',
 })
 export class AdminCategories {
-  private readonly api = inject(CategoryService);
+  private readonly categories = inject(CategoryService);
 
   readonly items = signal<CategoryResponse[]>([]);
   readonly loading = signal(true);
+  readonly error = signal(false);
   readonly showModal = signal(false);
   readonly name = signal('');
   readonly editingId = signal<string | null>(null);
@@ -23,12 +24,16 @@ export class AdminCategories {
 
   load(): void {
     this.loading.set(true);
-    this.api.findAll({ size: 50 }).subscribe({
+    this.error.set(false);
+    this.categories.findAll({ size: 50 }).subscribe({
       next: (page) => {
-        this.items.set(page.content ?? []);
+        this.items.set(page.content);
         this.loading.set(false);
       },
-      error: () => this.loading.set(false),
+      error: () => {
+        this.loading.set(false);
+        this.error.set(true);
+      },
     });
   }
 
@@ -40,8 +45,8 @@ export class AdminCategories {
       this.close();
       this.load();
     };
-    if (id) this.api.update(id, { name }).subscribe({ next: done });
-    else this.api.create({ name }).subscribe({ next: done });
+    if (id) this.categories.update(id, { name }).subscribe({ next: done });
+    else this.categories.create({ name }).subscribe({ next: done });
   }
 
   openCreate(): void {
@@ -63,6 +68,6 @@ export class AdminCategories {
   }
 
   remove(id: string): void {
-    this.api.delete(id).subscribe({ next: () => this.load() });
+    this.categories.delete(id).subscribe({ next: () => this.load() });
   }
 }

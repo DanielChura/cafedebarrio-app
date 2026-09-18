@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-cart-icon',
+  selector: 'app-category-icon',
   template: `
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -13,14 +13,14 @@ import { Component } from '@angular/core';
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="icon icon-tabler icons-tabler-outline icon-tabler-shopping-cart"
+      class="icon icon-tabler icons-tabler-outline icon-tabler-category"
     >
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M4 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-      <path d="M15 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-      <path d="M17 17h-11v-14h-2" />
-      <path d="M6 5l14 1l-1 7h-13" />
+      <path d="M4 4h6v6h-6l0 -6" />
+      <path d="M14 4h6v6h-6l0 -6" />
+      <path d="M4 14h6v6h-6l0 -6" />
+      <path d="M14 17a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
     </svg>
   `,
 })
-export class CartIcon {}
+export class CategoryIcon {}

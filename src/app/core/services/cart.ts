@@ -1,6 +1,12 @@
 import { Service, computed, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { CartItem, OrderItemRequest, OrderRequest, OrderResponse, ProductResponse } from '../models';
+import {
+  CartItem,
+  OrderItemRequest,
+  OrderRequest,
+  OrderResponse,
+  ProductResponse,
+} from '../models';
 import { OrderService } from './order';
 
 const STORAGE_KEY = 'cafe_cart';
@@ -28,9 +34,7 @@ export class CartService {
 
       if (existing) {
         updated = current.map((item) =>
-          item.product.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item,
+          item.product.id === product.id ? { ...item, quantity: item.quantity + quantity } : item,
         );
       } else {
         updated = [...current, { product, quantity }];
@@ -84,9 +88,7 @@ export class CartService {
       items: this.toOrderItems(),
     };
 
-    return this.orderService.create(request).pipe(
-      tap(() => this.clear()),
-    );
+    return this.orderService.create(request).pipe(tap(() => this.clear()));
   }
 
   private loadFromStorage(): CartItem[] {
@@ -99,10 +101,6 @@ export class CartService {
   }
 
   private saveToStorage(items: CartItem[]): void {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    } catch {
-      // Ignorar errores de almacenamiento local
-    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
   }
 }

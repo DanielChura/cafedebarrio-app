@@ -1,6 +1,4 @@
-import { Component, inject, resource } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
-import { CategoryService } from '../../../core/services/category';
+import { Component } from '@angular/core';
 import { CategoryResponse } from '../../../core/models/category';
 import { CategoryRow } from '../components/category-row/category-row';
 import { PromoBanner } from '../components/promo-banner/promo-banner';
@@ -14,12 +12,6 @@ const COLD_DRINKS_ID = '54dcaba6-d44a-4297-a2b7-1e562e1d261e';
   templateUrl: './home.html',
 })
 export class Home {
-  private readonly categories = inject(CategoryService);
-
-  readonly featured = resource({
-    loader: () => firstValueFrom(this.categories.findAll({ size: 5 })),
-  });
-
   readonly hotDrinks = {
     id: HOT_DRINKS_ID,
     name: 'Bebidas calientes',

@@ -1,17 +1,14 @@
 <main class="py-8">
   @if (confirmed()) {
     <div
-      role="dialog"
-      aria-modal="true"
-      aria-label="Pedido confirmado"
-      (keydown.escape)="closeConfirmation()"
       class="fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/50 p-4"
     >
-      <div class="flex w-full max-w-xs flex-col items-center justify-center gap-2 rounded-2xl bg-white p-6 text-center">
+      <div
+        class="flex w-full max-w-xs flex-col items-center justify-center gap-2 rounded-2xl bg-white p-6 text-center"
+      >
         <p class="text-base text-neutral-900">¡Pedido confirmado!</p>
         <p class="text-sm text-neutral-500">Tu compra se registró correctamente.</p>
         <button
-          type="button"
           (click)="closeConfirmation()"
           class="cursor-pointer rounded-2xl bg-orange-500 px-4 py-2 text-sm text-white"
         >
@@ -35,16 +32,19 @@
   } @else {
     <div class="flex flex-col gap-6 md:flex-row">
       <div class="flex flex-2 flex-col gap-4">
+        <h1 class="text-xl text-neutral-900">
+          Mi carrito
+          <span class="text-sm text-neutral-500"> ({{ cart.items().length }}) </span>
+        </h1>
         @for (item of cart.items(); track item.product.id) {
           <section
-            [attr.aria-label]="item.product.name"
-            class="flex flex-wrap items-center gap-4 rounded-2xl border border-neutral-200 p-6"
+            class="flex flex-row items-center gap-6 rounded-2xl border border-neutral-200 p-5"
           >
             @if (item.product.imageUrl) {
               <img
                 [src]="item.product.imageUrl"
                 [alt]="item.product.name"
-                class="h-14 w-14 rounded-2xl object-cover"
+                class="h-16 w-16 rounded-2xl object-cover"
               />
             }
             <div class="flex w-full flex-col gap-1">
@@ -55,28 +55,23 @@
             </div>
             <div class="flex items-center gap-2">
               <button
-                type="button"
                 (click)="decrease(item)"
-                aria-label="Quitar uno"
                 class="cursor-pointer rounded-2xl bg-neutral-50 px-2 py-1 text-sm text-neutral-900"
               >
                 -
               </button>
               <span class="text-sm text-neutral-900">{{ item.quantity }}</span>
               <button
-                type="button"
                 (click)="increase(item)"
-                aria-label="Agregar uno"
                 class="cursor-pointer rounded-2xl bg-neutral-50 px-2 py-1 text-sm text-neutral-900"
               >
                 +
               </button>
             </div>
-            <p class="text-sm text-neutral-900">
+            <p class="text-sm text-neutral-900 flex flex-row text-start">
               {{ item.product.price * item.quantity | currency: 'PEN' : 'S/ ' : '1.2-2' }}
             </p>
             <button
-              type="button"
               (click)="remove(item.product.id)"
               class="cursor-pointer text-sm text-neutral-500"
             >
@@ -87,12 +82,14 @@
       </div>
 
       <section
-        aria-label="Resumen y checkout"
-        class="flex flex-1 flex-col gap-4 rounded-2xl border border-neutral-200 p-6"
+        class="flex flex-1 flex-col gap-6 rounded-2xl border border-neutral-200 p-6 max-h-fit"
       >
-        <p class="text-base text-neutral-900">
-          Total: {{ cart.totalPrice() | currency: 'PEN' : 'S/ ' : '1.2-2' }}
-        </p>
+        <div class="flex flex-row items-center justify-between gap-2">
+          <p class="text-base text-neutral-900">Total:</p>
+          <p class="text-base text-neutral-900">
+            {{ cart.totalPrice() | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+          </p>
+        </div>
 
         <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
           <input
@@ -100,7 +97,6 @@
             type="tel"
             autocomplete="tel"
             placeholder="Teléfono"
-            aria-label="Teléfono"
             class="w-full rounded-2xl bg-neutral-50 px-4 py-2 text-sm text-neutral-900 focus:outline-none"
           />
           <input
@@ -108,7 +104,6 @@
             type="text"
             autocomplete="street-address"
             placeholder="Dirección de entrega"
-            aria-label="Dirección de entrega"
             class="w-full rounded-2xl bg-neutral-50 px-4 py-2 text-sm text-neutral-900 focus:outline-none"
           />
           @if (error()) {
@@ -116,10 +111,10 @@
           }
           <button
             type="submit"
-            [disabled]="sending()"
+            [disabled]="loading()"
             class="cursor-pointer rounded-2xl bg-orange-500 px-4 py-2 text-sm text-white"
           >
-            {{ sending() ? 'Enviando...' : 'Confirmar pedido' }}
+            {{ loading() ? 'Enviando...' : 'Confirmar pedido' }}
           </button>
         </form>
       </section>

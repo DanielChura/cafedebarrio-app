@@ -18,7 +18,7 @@ export class Cart {
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
   readonly error = signal('');
-  readonly sending = signal(false);
+  readonly loading = signal(false);
   readonly confirmed = signal(false);
 
   readonly form = this.formBuilder.group({
@@ -55,16 +55,16 @@ export class Cart {
     }
     const { phone, address } = this.form.getRawValue();
     this.error.set('');
-    this.sending.set(true);
+    this.loading.set(true);
     this.cart
       .checkout({ userId, phone: phone.trim(), address: address.trim() })
       .subscribe({
         next: () => {
-          this.sending.set(false);
+          this.loading.set(false);
           this.confirmed.set(true);
         },
         error: () => {
-          this.sending.set(false);
+          this.loading.set(false);
           this.error.set('No pudimos enviar tu pedido. Intenta de nuevo.');
         },
       });

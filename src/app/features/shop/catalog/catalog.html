@@ -1,7 +1,6 @@
 <main class="flex flex-col gap-8 py-8">
   <div class="flex gap-2 overflow-x-auto">
     <button
-      type="button"
       (click)="selectCategory(undefined)"
       class="shrink-0 cursor-pointer rounded-2xl px-4 py-2 text-sm {{
         categoryId() === undefined ? 'bg-orange-500 text-white' : 'bg-neutral-50 text-neutral-500'
@@ -11,7 +10,6 @@
     </button>
     @for (category of allCategories(); track category.id) {
       <button
-        type="button"
         (click)="selectCategory(category.id)"
         class="shrink-0 cursor-pointer rounded-2xl px-4 py-2 text-sm {{
           categoryId() === category.id
@@ -30,7 +28,7 @@
     } @empty {
       @if (loading()) {
         <p class="text-sm text-neutral-500 col-span-2 md:col-span-4">Cargando productos...</p>
-      } @else if (failed()) {
+      } @else if (error()) {
         <p class="text-sm text-orange-500 col-span-2 md:col-span-4">
           No pudimos cargar los productos. Revisa tu conexión e intenta de nuevo.
         </p>

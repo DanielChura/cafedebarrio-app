@@ -13,16 +13,16 @@ export class ProductList {
 
   readonly items = signal<ProductResponse[]>([]);
   readonly loading = signal(true);
-  readonly failed = signal(false);
+  readonly error = signal(false);
 
   constructor() {
     this.products.findAll({ size: 50 }).subscribe({
       next: (page) => {
-        this.items.set(page.content ?? []);
+        this.items.set(page.content);
         this.loading.set(false);
       },
       error: () => {
-        this.failed.set(true);
+        this.error.set(true);
         this.loading.set(false);
       },
     });

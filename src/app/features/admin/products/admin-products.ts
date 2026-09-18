@@ -11,12 +11,13 @@ import { ProductService } from '../../../core/services/product';
   templateUrl: './admin-products.html',
 })
 export class AdminProducts {
-  private readonly api = inject(ProductService);
-  private readonly categoriesApi = inject(CategoryService);
+  private readonly products = inject(ProductService);
+  private readonly categories = inject(CategoryService);
 
   readonly items = signal<ProductResponse[]>([]);
-  readonly categories = signal<CategoryResponse[]>([]);
+  readonly allCategories = signal<CategoryResponse[]>([]);
   readonly loading = signal(true);
+  readonly error = signal(false);
   readonly showModal = signal(false);
   readonly editingId = signal<string | null>(null);
 
@@ -29,22 +30,27 @@ export class AdminProducts {
 
   constructor() {
     this.load();
-    this.categoriesApi.findAll({ size: 50 }).subscribe({
+    this.categories.findAll({ size: 50 }).subscribe({
       next: (page) => {
-        this.categories.set(page.content ?? []);
-        if (!this.categoryId() && page.content?.length) this.categoryId.set(page.content[0].id);
+        this.allCategories.set(page.content);
+        if (!this.categoryId() && page.content.length) this.categoryId.set(page.content[0].id);
       },
+      error: () => this.error.set(true),
     });
   }
 
   load(): void {
     this.loading.set(true);
-    this.api.findAll({ size: 50 }).subscribe({
+    this.error.set(false);
+    this.products.findAll({ size: 50 }).subscribe({
       next: (page) => {
-        this.items.set(page.content ?? []);
+        this.items.set(page.content);
         this.loading.set(false);
       },
-      error: () => this.loading.set(false),
+      error: () => {
+        this.loading.set(false);
+        this.error.set(true);
+      },
     });
   }
 
@@ -64,8 +70,8 @@ export class AdminProducts {
       this.load();
     };
     const id = this.editingId();
-    if (id) this.api.update(id, body).subscribe({ next: done });
-    else this.api.create(body).subscribe({ next: done });
+    if (id) this.products.update(id, body).subscribe({ next: done });
+    else this.products.create(body).subscribe({ next: done });
   }
 
   openCreate(): void {
@@ -99,6 +105,6 @@ export class AdminProducts {
   }
 
   remove(id: string): void {
-    this.api.delete(id).subscribe({ next: () => this.load() });
+    this.products.delete(id).subscribe({ next: () => this.load() });
   }
 }

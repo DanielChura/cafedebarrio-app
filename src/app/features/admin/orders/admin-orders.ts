@@ -10,10 +10,11 @@ import { OrderService } from '../../../core/services/order';
   templateUrl: './admin-orders.html',
 })
 export class AdminOrders {
-  private readonly api = inject(OrderService);
+  private readonly orders = inject(OrderService);
 
   readonly items = signal<OrderResponse[]>([]);
   readonly loading = signal(true);
+  readonly error = signal(false);
   readonly states: OrderState[] = ['PENDING', 'PREPARING', 'DELIVERED'];
 
   constructor() {
@@ -22,17 +23,21 @@ export class AdminOrders {
 
   load(): void {
     this.loading.set(true);
-    this.api.findAll({ size: 50 }).subscribe({
+    this.error.set(false);
+    this.orders.findAll({ size: 50 }).subscribe({
       next: (page) => {
-        this.items.set(page.content ?? []);
+        this.items.set(page.content);
         this.loading.set(false);
       },
-      error: () => this.loading.set(false),
+      error: () => {
+        this.loading.set(false);
+        this.error.set(true);
+      },
     });
   }
 
   changeStatus(item: OrderResponse, status: OrderState): void {
     if (status === item.status) return;
-    this.api.updateStatus(item.id, { status }).subscribe({ next: () => this.load() });
+    this.orders.updateStatus(item.id, { status }).subscribe({ next: () => this.load() });
   }
 }

@@ -1,6 +1,5 @@
 <main class="flex w-full grow items-center justify-center bg-pattern min-h-screen px-4 py-16">
   <section
-    aria-labelledby="login-title"
     class="w-full max-w-sm bg-white border border-neutral-200 rounded-2xl p-8 flex flex-col gap-6"
   >
     <div class="flex flex-col gap-2">
@@ -8,47 +7,48 @@
         <img src="/logo.png" alt="Café de Barrio" class="h-14 w-auto object-contain" />
       </a>
       <div class="flex flex-col gap-1">
-        <h1 id="login-title" class="text-2xl">Iniciar sesión</h1>
+        <h1 class="text-2xl text-neutral-900">Iniciar sesión</h1>
         <p class="text-sm text-neutral-500">Bienvenido de vuelta a Café de Barrio.</p>
       </div>
     </div>
     <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
       <div class="flex flex-col gap-2">
-        <label for="email" class="text-sm">Correo</label>
+        <label for="email" class="text-sm text-neutral-900">Correo</label>
         <input
           id="email"
           type="email"
           formControlName="email"
           autocomplete="email"
           placeholder="tu@correo.com"
-          class="w-full border border-neutral-200 focus:bg-neutral-100 rounded-2xl px-4 py-2.5 text-sm placeholder:text-neutral-500 focus:outline-none"
+          class="w-full border border-neutral-200 focus:bg-neutral-50 rounded-2xl px-4 py-2.5 text-sm placeholder:text-neutral-500 focus:outline-none"
         />
         @if (form.controls.email.touched && form.controls.email.invalid) {
           <p class="text-sm text-orange-500">Ingresa un correo válido.</p>
         }
       </div>
       <div class="flex flex-col gap-2">
-        <label for="password" class="text-sm">Contraseña</label>
+        <label for="password" class="text-sm text-neutral-900">Contraseña</label>
         <input
           id="password"
           type="password"
           formControlName="password"
           autocomplete="current-password"
           placeholder="••••••••"
-          class="w-full border border-neutral-200 focus:bg-neutral-100 rounded-2xl px-4 py-2.5 text-sm placeholder:text-neutral-500 focus:outline-none"
+          class="w-full border border-neutral-200 focus:bg-neutral-50 rounded-2xl px-4 py-2.5 text-sm placeholder:text-neutral-500 focus:outline-none"
         />
         @if (form.controls.password.touched && form.controls.password.invalid) {
           <p class="text-sm text-orange-500">Ingresa tu contraseña.</p>
         }
       </div>
       @if (error()) {
-        <p role="alert" class="text-sm text-orange-500">{{ error() }}</p>
+        <p class="text-sm text-orange-500">{{ error() }}</p>
       }
       <button
         type="submit"
+        [disabled]="loading()"
         class="w-full cursor-pointer rounded-2xl bg-orange-500 px-4 py-2.5 text-sm text-white"
       >
-        Entrar
+        {{ loading() ? 'Entrando...' : 'Entrar' }}
       </button>
     </form>
     <p class="text-sm text-neutral-500">

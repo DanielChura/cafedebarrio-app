@@ -2,12 +2,11 @@
   <div class="flex flex-col gap-4">
     @if (loading()) {
       <p class="text-center text-sm text-neutral-500">Cargando productos...</p>
-    } @else if (failed()) {
+    } @else if (error()) {
       <p class="text-center text-sm text-orange-500">No pudimos cargar los productos. Revisa tu conexión e intenta de nuevo.</p>
     } @else {
       @for (item of items(); track item.id) {
         <section
-          [attr.aria-label]="item.name"
           class="flex flex-wrap items-center gap-4 rounded-2xl border border-neutral-200 p-6"
         >
           <div class="flex w-full flex-col gap-1">

@@ -1,15 +1,15 @@
 <main class="py-8">
-  <div class="flex flex-col gap-6">
-    <div class="flex flex-col gap-6 md:flex-row">
+  <div class="flex flex-col gap-6 md:flex-row">
+    <div class="flex flex-1 flex-col gap-4">
+      @if (me(); as user) {
+        <p class="text-xl text-neutral-900">
+          Hola, <span class="text-orange-500">{{ user.name }}!</span>
+        </p>
+      }
       <section
-        aria-label="Mis datos"
-        class="flex flex-1 flex-col gap-4 rounded-2xl border border-neutral-200 p-6 max-h-fit"
+        class="flex flex-col gap-4 rounded-2xl border border-neutral-200 p-6 max-h-fit"
       >
         @if (me(); as user) {
-          <div class="flex flex-col gap-1">
-            <p class="text-sm text-neutral-500">Nombre</p>
-            <p class="text-sm text-neutral-900">{{ user.name }}</p>
-          </div>
           <div class="flex flex-col gap-1">
             <p class="text-sm text-neutral-500">Correo</p>
             <p class="text-sm text-neutral-900">{{ user.email }}</p>
@@ -26,69 +26,72 @@
             <p class="text-sm text-neutral-500">ID</p>
             <p class="text-sm text-neutral-500 break-all">{{ user.id }}</p>
           </div>
-        } @else if (loadingMe()) {
+        } @else if (loading()) {
           <p class="text-center text-sm text-neutral-500">Cargando datos...</p>
         } @else {
           <p class="text-center text-sm text-orange-500">No pudimos cargar tus datos.</p>
         }
       </section>
-      <div class="flex flex-2 flex-col gap-4">
-        @if (loadingOrders() || loadingMe()) {
-          <p class="text-center text-sm text-neutral-500">Cargando pedidos...</p>
-        } @else if (ordersFailed()) {
-          <p class="text-center text-sm text-orange-500">
-            No pudimos cargar tus pedidos. Revisa tu conexión e intenta de nuevo.
-          </p>
-        } @else {
-          @for (order of userOrders(); track order.id) {
-            <section
-              [attr.aria-label]="'Pedido ' + order.id"
-              class="flex flex-col gap-4 rounded-2xl border border-neutral-200 p-6"
-            >
-              <p class="text-base text-neutral-900">
-                Total: {{ order.total | currency: 'PEN' : 'S/ ' : '1.2-2' }}
-              </p>
-              <div class="flex flex-col gap-1">
-                <p class="text-sm text-neutral-500">Fecha: {{ order.createdAt | date: 'short' }}</p>
-                <p class="text-sm text-neutral-500">Teléfono: {{ order.phone }}</p>
-                <p class="text-sm text-neutral-500">Dirección: {{ order.address }}</p>
-              </div>
-              <div class="flex flex-col gap-2">
-                @for (item of order.items; track item.productId) {
-                  <div class="flex flex-col gap-2 rounded-md px-4 py-2 bg-neutral-50">
-                    <div class="flex items-center justify-between gap-4">
-                      <p class="text-sm text-neutral-900">
-                        {{ item.productName }} x {{ item.quantity }}
-                      </p>
-                      <p class="text-sm text-neutral-900">
-                        {{ item.subtotal | currency: 'PEN' : 'S/ ' : '1.2-2' }}
-                      </p>
-                    </div>
-                    <p class="text-sm text-neutral-500">
-                      {{ item.unitPrice | currency: 'PEN' : 'S/ ' : '1.2-2' }} c/u
+    </div>
+    <div class="flex flex-2 flex-col gap-4">
+      <h1 class="text-xl text-neutral-900">
+        Mis órdenes
+        <span class="text-sm text-neutral-500"> ({{ userOrders().length }}) </span>
+      </h1>
+      @if (loading()) {
+        <p class="text-center text-sm text-neutral-500">Cargando pedidos...</p>
+      } @else if (error()) {
+        <p class="text-center text-sm text-orange-500">
+          No pudimos cargar tus pedidos. Revisa tu conexión e intenta de nuevo.
+        </p>
+      } @else {
+        @for (order of userOrders(); track order.id) {
+          <section
+            class="flex flex-col gap-4 rounded-2xl border border-neutral-200 p-6 max-h-fit"
+          >
+            <p class="text-base text-neutral-900">
+              Total: {{ order.total | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+            </p>
+            <div class="flex flex-col gap-1">
+              <p class="text-sm text-neutral-500">Fecha: {{ order.createdAt | date: 'short' }}</p>
+              <p class="text-sm text-neutral-500">Teléfono: {{ order.phone }}</p>
+              <p class="text-sm text-neutral-500">Dirección: {{ order.address }}</p>
+            </div>
+            <div class="flex flex-col gap-2">
+              @for (item of order.items; track item.productId) {
+                <div class="flex flex-col gap-2 rounded-2xl px-4 py-2 bg-neutral-50">
+                  <div class="flex items-center justify-between gap-4">
+                    <p class="text-sm text-neutral-900">
+                      {{ item.productName }} x {{ item.quantity }}
+                    </p>
+                    <p class="text-sm text-neutral-900">
+                      {{ item.subtotal | currency: 'PEN' : 'S/ ' : '1.2-2' }}
                     </p>
                   </div>
-                }
-              </div>
-              <p class="text-sm text-neutral-500 break-all">Pedido: {{ order.id }}</p>
-            </section>
-          } @empty {
-            <div class="flex flex-col items-center justify-center gap-4 text-center">
-              <img
-                src="/empty-state.webp"
-                alt="Sin pedidos"
-                class="w-full max-w-xs rounded-2xl object-contain"
-              />
-              <p class="text-sm text-neutral-500">Aún no tienes pedidos.</p>
-              <a
-                routerLink="/catalog"
-                class="rounded-2xl bg-orange-500 px-4 py-2 text-sm text-white"
-                >Ver catálogo</a
-              >
+                  <p class="text-sm text-neutral-500">
+                    {{ item.unitPrice | currency: 'PEN' : 'S/ ' : '1.2-2' }} c/u
+                  </p>
+                </div>
+              }
             </div>
-          }
+            <p class="text-sm text-neutral-500 break-all">Pedido: {{ order.id }}</p>
+          </section>
+        } @empty {
+          <div class="flex flex-col items-center justify-center gap-4 text-center">
+            <img
+              src="/empty-state.webp"
+              alt="Sin pedidos"
+              class="w-full max-w-xs rounded-2xl object-contain"
+            />
+            <p class="text-sm text-neutral-500">Aún no tienes pedidos.</p>
+            <a
+              routerLink="/catalog"
+              class="rounded-2xl bg-orange-500 px-4 py-2 text-sm text-white"
+              >Ver catálogo</a
+            >
+          </div>
         }
-      </div>
+      }
     </div>
   </div>
 </main>

@@ -18,7 +18,7 @@ export class ProductDetail {
 
   readonly product = signal<ProductResponse | null>(null);
   readonly loading = signal(true);
-  readonly failed = signal(false);
+  readonly error = signal(false);
   readonly quantity = signal(1);
 
   readonly subtotal = computed(() => (this.product()?.price ?? 0) * this.quantity());
@@ -26,7 +26,7 @@ export class ProductDetail {
   constructor() {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) {
-      this.failed.set(true);
+      this.error.set(true);
       this.loading.set(false);
       return;
     }
@@ -36,7 +36,7 @@ export class ProductDetail {
         this.loading.set(false);
       },
       error: () => {
-        this.failed.set(true);
+        this.error.set(true);
         this.loading.set(false);
       },
     });

@@ -24,18 +24,14 @@
         <p class="text-sm text-neutral-500">Stock: {{ item.stock }}</p>
         <div class="flex items-center gap-2">
           <button
-            type="button"
             (click)="decrease()"
-            aria-label="Quitar uno"
             class="cursor-pointer rounded-2xl bg-neutral-50 px-4 py-2 text-sm text-neutral-900"
           >
             -
           </button>
           <span class="text-sm text-neutral-900">{{ quantity() }}</span>
           <button
-            type="button"
             (click)="increase()"
-            aria-label="Agregar uno"
             class="cursor-pointer rounded-2xl bg-neutral-50 px-4 py-2 text-sm text-neutral-900"
           >
             +
@@ -45,7 +41,6 @@
           Subtotal: {{ subtotal() | currency: 'PEN' : 'S/ ' : '1.2-2' }}
         </p>
         <button
-          type="button"
           (click)="add()"
           class="cursor-pointer rounded-2xl bg-orange-500 px-4 py-2 text-sm text-white"
         >

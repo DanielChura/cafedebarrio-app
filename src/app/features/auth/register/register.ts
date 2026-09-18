@@ -15,6 +15,7 @@ export class Register {
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
   readonly error = signal('');
+  readonly loading = signal(false);
 
   readonly form = this.formBuilder.group({
     name: ['', Validators.required],
@@ -35,12 +36,16 @@ export class Register {
       password: formValue.password,
     };
     this.error.set('');
+    this.loading.set(true);
     this.auth.register(request).subscribe({
       next: (response) => {
         this.auth.saveSession(response);
         this.router.navigateByUrl('/');
       },
-      error: () => this.error.set('No pudimos crear tu cuenta. Intenta de nuevo.'),
+      error: () => {
+        this.loading.set(false);
+        this.error.set('No pudimos crear tu cuenta. Intenta de nuevo.');
+      },
     });
   }
 }
