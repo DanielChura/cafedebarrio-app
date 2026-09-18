@@ -1,26 +1,17 @@
-<main class="flex flex-col gap-12 py-8 pb-24">
+<main class="flex flex-col gap-12">
   <app-promo-banner
-    title="Café de especialidad, directo de tu barrio."
-    description="Explora por categoría o revisa todo el menú."
-    ctaLabel="Ver catálogo"
-    ctaLink="/catalog"
+    imageUrl="https://pedidosya.dhmedia.io/image/pedidosya/only-home-squad/web-promotions-banners/bank-promotions-latam.png"
+    alt="Disfruta de tu café en CafeDeBarrio"
   />
 
   <app-category-row [category]="hotDrinks" />
   <app-category-row [category]="coldDrinks" />
 
   <app-promo-banner
-    title="¿Ya tienes tu favorito?"
-    description="Crea tu cuenta y pide más rápido la próxima vez."
-    ctaLabel="Crear cuenta"
-    ctaLink="/register"
+    imageUrl="https://pedidosya.dhmedia.io/image/pedidosya/only-home-squad/web-promotions-banners/food-promotions-latam.png"
+    alt="Variedades de café de especialidad"
   />
 
-  @for (c of (featured.value()?.content ?? []).slice(0, 2); track c.id) {
-    <app-category-row [category]="c" />
-  }
-
-  @for (c of (featured.value()?.content ?? []).slice(0, 2); track c.id) {
-    <app-category-row [category]="c" />
-  }
+  <app-category-row [category]="coldDrinks" />
+  <app-category-row [category]="hotDrinks" />
 </main>

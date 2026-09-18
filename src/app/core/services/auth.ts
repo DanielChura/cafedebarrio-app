@@ -2,9 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AuthResponse, LoginRequest, RegisterRequest, UserResponse } from '../models';
-
-export const AUTH_TOKEN_KEY = 'token';
+import { AuthResponse, AuthUser, LoginRequest, RegisterRequest, UserResponse, UserRole } from '../models';
 
 @Service()
 export class AuthService {
@@ -21,5 +19,57 @@ export class AuthService {
 
   me(): Observable<UserResponse> {
     return this.http.get<UserResponse>(`${this.apiUrl}/me`);
+  }
+
+  saveSession(response: AuthResponse): void {
+    localStorage.setItem('token', response.token);
+    const user: AuthUser = {
+      id: response.id,
+      name: response.name,
+      email: response.email,
+      role: response.role,
+    };
+    localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  getRole(): UserRole | null {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser === null) {
+      return null;
+    }
+    try {
+      return (JSON.parse(savedUser) as AuthUser).role;
+    } catch {
+      return null;
+    }
+  }
+
+  isLoggedIn(): boolean {
+    return this.getToken() !== null;
+  }
+
+  getUser(): AuthUser | null {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser === null) {
+      return null;
+    }
+    try {
+      return JSON.parse(savedUser) as AuthUser;
+    } catch {
+      return null;
+    }
+  }
+
+  getUserId(): string | null {
+    return this.getUser()?.id ?? null;
+  }
+
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
   }
 }

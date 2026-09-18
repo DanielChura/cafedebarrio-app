@@ -19,18 +19,17 @@ export interface UserRequest {
   role: UserRole;
 }
 
-export interface AuthResponse {
-  token: string;
+export interface AuthUser {
   id: string;
   name: string;
   email: string;
   role: UserRole;
 }
 
-export interface UserResponse {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
+export interface AuthResponse extends AuthUser {
+  token: string;
+}
+
+export interface UserResponse extends AuthUser {
   createdAt: string;
 }

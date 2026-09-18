@@ -1,45 +1,42 @@
 <main class="flex flex-col gap-8 py-8">
-  <div class="flex flex-col gap-2">
-    <h1 class="text-2xl text-neutral-900">Catálogo</h1>
-    <p class="text-sm text-neutral-500">Todo el menú en un solo lugar.</p>
-  </div>
-
-  <div class="flex flex-col gap-4">
-    <input
-      type="search"
-      placeholder="Buscar producto..."
-      [(ngModel)]="search"
-      class="border border-neutral-200 rounded-2xl px-4 py-2 text-sm text-neutral-900"
-    />
-    <div class="flex gap-2 overflow-x-auto">
+  <div class="flex gap-2 overflow-x-auto">
+    <button
+      type="button"
+      (click)="selectCategory(undefined)"
+      class="shrink-0 cursor-pointer rounded-2xl px-4 py-2 text-sm {{
+        categoryId() === undefined ? 'bg-orange-500 text-white' : 'bg-neutral-50 text-neutral-500'
+      }}"
+    >
+      Todo
+    </button>
+    @for (category of allCategories(); track category.id) {
       <button
         type="button"
-        (click)="categoryId.set(undefined)"
-        [class.text-amber-500]="categoryId() === undefined"
-        [class.text-neutral-500]="categoryId() !== undefined"
-        class="shrink-0 text-sm border border-neutral-200 rounded-2xl px-4 py-2"
+        (click)="selectCategory(category.id)"
+        class="shrink-0 cursor-pointer rounded-2xl px-4 py-2 text-sm {{
+          categoryId() === category.id
+            ? 'bg-orange-500 text-white'
+            : 'bg-neutral-50 text-neutral-500'
+        }}"
       >
-        Todo
+        {{ category.name }}
       </button>
-      @for (c of allCategories.value()?.content ?? []; track c.id) {
-        <button
-          type="button"
-          (click)="categoryId.set(c.id)"
-          [class.text-amber-500]="categoryId() === c.id"
-          [class.text-neutral-500]="categoryId() !== c.id"
-          class="shrink-0 text-sm border border-neutral-200 rounded-2xl px-4 py-2"
-        >
-          {{ c.name }}
-        </button>
-      }
-    </div>
+    }
   </div>
 
   <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
-    @for (p of items.value()?.content ?? []; track p.id) {
-      <app-product-card [product]="p" />
+    @for (product of items(); track product.id) {
+      <app-product-card [product]="product" />
     } @empty {
-      <p class="text-sm text-neutral-500">Sin resultados.</p>
+      @if (loading()) {
+        <p class="text-sm text-neutral-500 col-span-2 md:col-span-4">Cargando productos...</p>
+      } @else if (failed()) {
+        <p class="text-sm text-orange-500 col-span-2 md:col-span-4">
+          No pudimos cargar los productos. Revisa tu conexión e intenta de nuevo.
+        </p>
+      } @else {
+        <p class="text-sm text-neutral-500 col-span-2 md:col-span-4">Sin resultados.</p>
+      }
     }
   </div>
 </main>

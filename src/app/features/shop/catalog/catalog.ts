@@ -1,42 +1,60 @@
-import { Component, inject, resource, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
-import { Page, ProductResponse } from '../../../core/models';
+import { Component, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CategoryResponse, ProductResponse } from '../../../core/models';
 import { CategoryService } from '../../../core/services/category';
 import { ProductService } from '../../../core/services/product';
 import { ProductCard } from '../components/product-card/product-card';
 
 @Component({
   selector: 'app-catalog',
-  imports: [FormsModule, ProductCard],
+  imports: [ProductCard],
   templateUrl: './catalog.html',
 })
 export class Catalog {
   private readonly products = inject(ProductService);
   private readonly categories = inject(CategoryService);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
-  readonly search = signal('');
+  readonly items = signal<ProductResponse[]>([]);
+  readonly allCategories = signal<CategoryResponse[]>([]);
+  readonly loading = signal(true);
+  readonly failed = signal(false);
   readonly categoryId = signal<string | undefined>(undefined);
 
   constructor() {
-    this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe((params) => {
-      this.search.set(params.get('q') ?? '');
+    this.categories.findAll({ size: 50 }).subscribe({
+      next: (page) => this.allCategories.set(page.content),
+    });
+
+    this.route.queryParamMap.subscribe((params) => {
+      const category = params.get('category') ?? undefined;
+      const search = params.get('q') ?? '';
+      this.categoryId.set(category);
+      this.loadProducts(search, category);
     });
   }
 
-  readonly items = resource<
-    Page<ProductResponse>,
-    { name: string; categoryId: string | undefined }
-  >({
-    params: () => ({ name: this.search(), categoryId: this.categoryId() }),
-    loader: ({ params }) =>
-      firstValueFrom(this.products.findAll({ ...params, onlyActive: true, size: 24 })),
-  });
+  selectCategory(categoryId: string | undefined): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { category: categoryId ?? null },
+      queryParamsHandling: 'merge',
+    });
+  }
 
-  readonly allCategories = resource({
-    loader: () => firstValueFrom(this.categories.findAll({ size: 50 })),
-  });
+  private loadProducts(search: string, categoryId?: string): void {
+    this.loading.set(true);
+    this.failed.set(false);
+    this.products.findAll({ name: search, categoryId, onlyActive: true, size: 50 }).subscribe({
+      next: (page) => {
+        this.items.set(page.content);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+        this.failed.set(true);
+      },
+    });
+  }
 }

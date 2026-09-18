@@ -2,15 +2,24 @@
   id="account-menu"
   role="menu"
   aria-label="Órdenes y cuenta"
-  class="absolute right-0 top-full mt-2 flex w-48 flex-col gap-1 rounded-2xl bg-neutral-50 p-2"
+  class="absolute right-0 top-full mt-2 flex w-48 flex-col gap-1 rounded-2xl bg-white shadow-2xl p-2"
 >
   <a
     routerLink="/my-orders"
     role="menuitem"
     (click)="closed.emit()"
-    class="rounded-2xl px-4 py-2 text-sm text-neutral-900"
+    class="rounded-2xl px-4 py-2 text-sm"
     >Mis pedidos</a
   >
+  @if (isAdmin) {
+    <a
+      routerLink="/admin/products"
+      role="menuitem"
+      (click)="closed.emit()"
+      class="rounded-2xl px-4 py-2 text-sm"
+      >Productos</a
+    >
+  }
   <button
     type="button"
     role="menuitem"

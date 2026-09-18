@@ -1,7 +1,7 @@
 @if ((items.value()?.content ?? []).length > 0) {
   <section class="flex flex-col gap-6" [attr.aria-labelledby]="'cat-' + category().id">
     <div class="flex items-center justify-between gap-6">
-      <h2 [id]="'cat-' + category().id" class="text-xl text-neutral-900 font-medium">
+      <h2 [id]="'cat-' + category().id" class="text-xl text-neutral-900">
         {{ category().name }}
       </h2>
       <a
@@ -11,9 +11,9 @@
         >Ver todo</a
       >
     </div>
-    <div class="flex gap-6 overflow-x-auto">
+    <div class="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-5">
       @for (p of items.value()?.content ?? []; track p.id) {
-        <app-product-card [product]="p" class="w-40 shrink-0 flex-1" />
+        <app-product-card [product]="p" />
       }
     </div>
   </section>

@@ -1,0 +1,69 @@
+<main class="py-8">
+  @if (loading()) {
+    <p class="text-center text-sm text-neutral-500">Cargando producto...</p>
+  } @else if (product(); as item) {
+    <div class="flex flex-col gap-8 md:flex-row">
+      @if (item.imageUrl) {
+        <img
+          [src]="item.imageUrl"
+          [alt]="item.name"
+          class="w-full aspect-square rounded-2xl bg-neutral-50 object-cover md:max-w-md"
+        />
+      } @else {
+        <div class="w-full aspect-square rounded-2xl bg-neutral-50 md:max-w-md"></div>
+      }
+      <div class="flex flex-1 flex-col gap-4">
+        <p class="text-sm text-neutral-500">{{ item.categoryName }}</p>
+        <p class="text-2xl text-neutral-900">{{ item.name }}</p>
+        @if (item.description) {
+          <p class="text-sm text-neutral-500">{{ item.description }}</p>
+        }
+        <p class="text-base text-orange-500">
+          {{ item.price | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+        </p>
+        <p class="text-sm text-neutral-500">Stock: {{ item.stock }}</p>
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            (click)="decrease()"
+            aria-label="Quitar uno"
+            class="cursor-pointer rounded-2xl bg-neutral-50 px-4 py-2 text-sm text-neutral-900"
+          >
+            -
+          </button>
+          <span class="text-sm text-neutral-900">{{ quantity() }}</span>
+          <button
+            type="button"
+            (click)="increase()"
+            aria-label="Agregar uno"
+            class="cursor-pointer rounded-2xl bg-neutral-50 px-4 py-2 text-sm text-neutral-900"
+          >
+            +
+          </button>
+        </div>
+        <p class="text-sm text-neutral-900">
+          Subtotal: {{ subtotal() | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+        </p>
+        <button
+          type="button"
+          (click)="add()"
+          class="cursor-pointer rounded-2xl bg-orange-500 px-4 py-2 text-sm text-white"
+        >
+          Agregar al carrito
+        </button>
+      </div>
+    </div>
+  } @else {
+    <div class="flex flex-col items-center justify-center gap-4 text-center">
+      <img
+        src="/empty-state.webp"
+        alt="Producto no encontrado"
+        class="w-full max-w-xs rounded-2xl object-contain"
+      />
+      <p class="text-sm text-orange-500">No pudimos cargar este producto.</p>
+      <a routerLink="/catalog" class="rounded-2xl bg-orange-500 px-4 py-2 text-sm text-white"
+        >Volver al catálogo</a
+      >
+    </div>
+  }
+</main>

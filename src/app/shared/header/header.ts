@@ -1,15 +1,21 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { AUTH_TOKEN_KEY } from '../../../core/services/auth';
+import { AuthService } from '../../core/services/auth';
+import { CartService } from '../../core/services/cart';
 import { AccountMenu } from '../account-menu/account-menu';
+import { CartIcon } from '../icons/cart-icon';
+import { SearchIcon } from '../icons/search-icon';
+import { UserIcon } from '../icons/user-icon';
 
 @Component({
-  imports: [RouterLink, AccountMenu],
+  imports: [RouterLink, AccountMenu, CartIcon, SearchIcon, UserIcon],
   selector: 'app-header',
   templateUrl: './header.html',
 })
 export class Header {
+  private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  readonly cart = inject(CartService);
 
   readonly menuOpen = signal(false);
 
@@ -18,8 +24,7 @@ export class Header {
   }
 
   onAccountClick(): void {
-    const token = localStorage.getItem(AUTH_TOKEN_KEY);
-    if (!token) {
+    if (!this.auth.isLoggedIn()) {
       this.router.navigateByUrl('/login');
       return;
     }

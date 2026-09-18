@@ -1,69 +1,76 @@
-<main class="flex w-full grow items-center justify-center bg-orange-500 min-h-screen px-4 py-16">
+<main class="flex w-full grow items-center justify-center bg-pattern min-h-screen px-4 py-16">
   <section
-      aria-labelledby="register-title"
-      class="w-full max-w-sm bg-white rounded-2xl p-8 flex flex-col gap-6"
-    >
-      <div class="flex flex-col gap-2">
-        <h1 id="register-title" class="text-2xl text-neutral-900">Crear cuenta</h1>
+    aria-labelledby="register-title"
+    class="w-full max-w-sm bg-white border border-neutral-200 rounded-2xl p-8 flex flex-col gap-6"
+  >
+    <div class="flex flex-col gap-2">
+      <a routerLink="/" class="self-center">
+        <img src="/logo.png" alt="Café de Barrio" class="h-14 w-auto object-contain" />
+      </a>
+      <div class="flex flex-col gap-1">
+        <h1 id="register-title" class="text-2xl">Crear cuenta</h1>
         <p class="text-sm text-neutral-500">Únete a Café de Barrio y pide más rápido.</p>
       </div>
-      <form
-        class="flex flex-col gap-4"
-        (submit)="submit(name.value, email.value, password.value); $event.preventDefault()"
-      >
-        <div class="flex flex-col gap-2">
-          <label for="name" class="text-sm text-neutral-900">Nombre</label>
-          <input
-            #name
-            id="name"
-            name="name"
-            type="text"
-            required
-            autocomplete="name"
-            placeholder="Tu nombre"
-            class="w-full bg-neutral-50 rounded-2xl px-4 py-2 text-sm text-neutral-900 placeholder:text-neutral-500"
-          />
-        </div>
-        <div class="flex flex-col gap-2">
-          <label for="email" class="text-sm text-neutral-900">Correo</label>
-          <input
-            #email
-            id="email"
-            name="email"
-            type="email"
-            required
-            autocomplete="email"
-            placeholder="tu@correo.com"
-            class="w-full bg-neutral-50 rounded-2xl px-4 py-2 text-sm text-neutral-900 placeholder:text-neutral-500"
-          />
-        </div>
-        <div class="flex flex-col gap-2">
-          <label for="password" class="text-sm text-neutral-900">Contraseña</label>
-          <input
-            #password
-            id="password"
-            name="password"
-            type="password"
-            required
-            minlength="6"
-            autocomplete="new-password"
-            placeholder="••••••••"
-            class="w-full bg-neutral-50 rounded-2xl px-4 py-2 text-sm text-neutral-900 placeholder:text-neutral-500"
-          />
-        </div>
-        @if (error()) {
-          <p role="alert" class="text-sm text-orange-500">{{ error() }}</p>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="name" class="text-sm">Nombre</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          autocomplete="name"
+          placeholder="Tu nombre"
+          class="w-full border border-neutral-200 focus:bg-neutral-100 rounded-2xl px-4 py-2.5 text-sm placeholder:text-neutral-500 focus:outline-none"
+        />
+        @if (form.controls.name.touched && form.controls.name.invalid) {
+          <p class="text-sm text-orange-500">Ingresa tu nombre.</p>
         }
-        <button
-          type="submit"
-          class="w-full cursor-pointer rounded-2xl bg-orange-500 px-4 py-2 text-sm text-white"
-        >
-          Registrarme
-        </button>
-      </form>
-      <p class="text-sm text-neutral-500">
-        ¿Ya tienes cuenta?
-        <a routerLink="/login" class="text-orange-500">Inicia sesión</a>
-      </p>
-    </section>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="email" class="text-sm">Correo</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          autocomplete="email"
+          placeholder="tu@correo.com"
+          class="w-full border border-neutral-200 focus:bg-neutral-100 rounded-2xl px-4 py-2.5 text-sm placeholder:text-neutral-500 focus:outline-none"
+        />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <p class="text-sm text-orange-500">Ingresa un correo válido.</p>
+        }
+      </div>
+      <div class="flex flex-col gap-2">
+        <label for="password" class="text-sm">Contraseña</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          autocomplete="new-password"
+          placeholder="••••••••"
+          class="w-full border border-neutral-200 focus:bg-neutral-100 rounded-2xl px-4 py-2.5 text-sm placeholder:text-neutral-500 focus:outline-none"
+        />
+        @if (form.controls.password.touched && form.controls.password.hasError('required')) {
+          <p class="text-sm text-orange-500">Ingresa una contraseña.</p>
+        }
+        @if (form.controls.password.touched && form.controls.password.hasError('minlength')) {
+          <p class="text-sm text-orange-500">Mínimo 6 caracteres.</p>
+        }
+      </div>
+      @if (error()) {
+        <p role="alert" class="text-sm text-orange-500">{{ error() }}</p>
+      }
+      <button
+        type="submit"
+        class="w-full cursor-pointer rounded-2xl bg-orange-500 px-4 py-2.5 text-sm text-white"
+      >
+        Registrarme
+      </button>
+    </form>
+    <p class="text-sm text-neutral-500">
+      ¿Ya tienes cuenta?
+      <a routerLink="/login" class="text-orange-500">Inicia sesión</a>
+    </p>
+  </section>
 </main>

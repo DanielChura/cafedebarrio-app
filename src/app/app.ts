@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { Header } from './shared/components/header/header';
-import { Footer } from './shared/components/footer/footer';
+import { Header } from './shared/header/header';
+import { Footer } from './shared/footer/footer';
 import { filter } from 'rxjs';
 
 @Component({
@@ -11,18 +11,18 @@ import { filter } from 'rxjs';
 })
 export class App {
   isAuthPage: boolean = false;
+  isAdminPage: boolean = false;
 
   constructor(private router: Router) {
-    this.isAuthPage = this.isAuthUrl(this.router.url);
+    this.updateFlags(this.router.url);
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(
-        (event: NavigationEnd) => (this.isAuthPage = this.isAuthUrl(event.urlAfterRedirects)),
-      );
+      .subscribe((event: NavigationEnd) => this.updateFlags(event.urlAfterRedirects));
   }
 
-  private isAuthUrl(url: string): boolean {
+  private updateFlags(url: string): void {
     const path = url.split('?')[0];
-    return path === '/login' || path === '/register';
+    this.isAdminPage = path.startsWith('/admin');
+    this.isAuthPage = path === '/login' || path === '/register' || this.isAdminPage;
   }
 }
