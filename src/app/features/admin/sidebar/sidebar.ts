@@ -1,21 +1,14 @@
 import { Component } from '@angular/core';
 import { NgComponentOutlet } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { CartIcon } from '../../../shared/icons/cart-icon';
-import { CategoryIcon } from '../../../shared/icons/category-icon';
-import { ProductIcon } from '../../../shared/icons/product-icon';
-import { UserIcon } from '../../../shared/icons/user-icon';
+import { ExitIcon } from '../../../shared/icons/exit-icon';
+import { adminLinks } from './admin-links';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterLink, RouterLinkActive, NgComponentOutlet],
+  imports: [RouterLink, RouterLinkActive, NgComponentOutlet, ExitIcon],
   templateUrl: './sidebar.html',
 })
 export class Sidebar {
-  readonly links = [
-    { path: 'categorias', label: 'Categorías', icon: CategoryIcon },
-    { path: 'productos', label: 'Productos', icon: ProductIcon },
-    { path: 'usuarios', label: 'Usuarios', icon: UserIcon },
-    { path: 'ordenes', label: 'Órdenes', icon: CartIcon },
-  ];
+  readonly links = adminLinks;
 }

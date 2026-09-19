@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 
 @Component({
-  selector: 'app-category-icon',
+  selector: 'app-menu-icon',
   template: `
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -16,13 +16,12 @@ import { Component, input } from '@angular/core';
       class="{{ class() }}"
     >
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M4 4h6v6h-6l0 -6" />
-      <path d="M14 4h6v6h-6l0 -6" />
-      <path d="M4 14h6v6h-6l0 -6" />
-      <path d="M14 17a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+      <path d="M4 6l16 0" />
+      <path d="M4 12l16 0" />
+      <path d="M4 18l16 0" />
     </svg>
   `,
 })
-export class CategoryIcon {
+export class MenuIcon {
   readonly class = input<string>('size-4 md:size-5');
 }

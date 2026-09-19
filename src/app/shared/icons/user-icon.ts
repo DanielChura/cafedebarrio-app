@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-user-icon',
@@ -12,11 +12,13 @@ import { Component } from '@angular/core';
     stroke-width="2"
     stroke-linecap="round"
     stroke-linejoin="round"
-    class="icon icon-tabler icons-tabler-outline icon-tabler-user"
+    class="{{ class() }}"
   >
     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
     <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
     <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
   </svg>`,
 })
-export class UserIcon {}
+export class UserIcon {
+  readonly class = input<string>('size-4 md:size-5');
+}

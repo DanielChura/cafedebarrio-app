@@ -1,0 +1,43 @@
+<div class="sticky top-0 z-30 md:hidden">
+  <header
+    class="flex items-center justify-between gap-4 border-b border-neutral-200 bg-white px-4 py-2"
+  >
+    <a routerLink="/" class="flex cursor-pointer items-center">
+      <img src="/logo.png" alt="Café de Barrio" class="h-10 w-auto object-contain" />
+    </a>
+    <div class="flex items-center gap-4">
+      <button
+        (click)="open.update((v) => !v)"
+        aria-label="Abrir menú"
+        class="cursor-pointer text-neutral-600 hover:text-neutral-800"
+      >
+        <app-menu-icon class="size-4" />
+      </button>
+      <button
+        (click)="logout()"
+        aria-label="Cerrar sesión"
+        class="cursor-pointer text-neutral-600 hover:text-neutral-800"
+      >
+        <app-exit-icon class="size-4" />
+      </button>
+    </div>
+  </header>
+
+  @if (open()) {
+    <nav
+      class="absolute inset-x-0 top-full flex flex-col gap-2 border-b border-neutral-200 bg-white p-4"
+    >
+      @for (link of links; track link.path) {
+        <a
+          [routerLink]="link.path"
+          (click)="close()"
+          routerLinkActive="bg-orange-500 text-white hover:text-white"
+          class="flex cursor-pointer items-center gap-3 rounded-2xl px-4 py-3 text-xs text-neutral-600 hover:text-neutral-800"
+        >
+          <ng-container *ngComponentOutlet="link.icon" />
+          {{ link.label }}
+        </a>
+      }
+    </nav>
+  }
+</div>

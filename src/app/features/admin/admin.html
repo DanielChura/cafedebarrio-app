@@ -1,6 +1,7 @@
-<div class="flex h-dvh grow flex-col md:flex-row">
-  <app-sidebar class="block w-full shrink-0 md:w-60" />
-  <section class="min-w-0 grow bg-white p-6 md:p-10">
+<div class="flex min-h-screen grow flex-col md:flex-row">
+  <app-sidebar class="hidden w-full shrink-0 md:block md:w-60" />
+  <app-admin-topbar class="block md:hidden" />
+  <section class="min-w-0 grow overflow-y-auto bg-white p-6 md:p-10">
     <router-outlet />
   </section>
 </div>

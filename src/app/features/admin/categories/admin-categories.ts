@@ -2,10 +2,13 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CategoryResponse } from '../../../core/models';
 import { CategoryService } from '../../../core/services/category';
+import { AddIcon } from '../../../shared/icons/add-icon';
+import { EditIcon } from '../../../shared/icons/edit-icon';
+import { TrashIcon } from '../../../shared/icons/trash-icon';
 
 @Component({
   selector: 'app-admin-categories',
-  imports: [FormsModule],
+  imports: [FormsModule, AddIcon, EditIcon, TrashIcon],
   templateUrl: './admin-categories.html',
 })
 export class AdminCategories {

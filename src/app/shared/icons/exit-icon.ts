@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 
 @Component({
-  selector: 'app-category-icon',
+  selector: 'app-exit-icon',
   template: `
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -16,13 +16,13 @@ import { Component, input } from '@angular/core';
       class="{{ class() }}"
     >
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M4 4h6v6h-6l0 -6" />
-      <path d="M14 4h6v6h-6l0 -6" />
-      <path d="M4 14h6v6h-6l0 -6" />
-      <path d="M14 17a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+      <path d="M13 12v.01" />
+      <path d="M3 21h18" />
+      <path d="M5 21v-16a2 2 0 0 1 2 -2h7.5m2.5 10.5v7.5" />
+      <path d="M14 7h7m-3 -3l3 3l-3 3" />
     </svg>
   `,
 })
-export class CategoryIcon {
+export class ExitIcon {
   readonly class = input<string>('size-4 md:size-5');
 }

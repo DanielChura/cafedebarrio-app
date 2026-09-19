@@ -1,26 +1,27 @@
 <header class="bg-white border-b border-neutral-200 fixed w-full z-40">
-  <div class="mx-auto max-w-6xl px-2 py-2 flex items-center gap-6">
+  <div class="mx-auto max-w-6xl px-4 py-2 flex items-center gap-4 md:gap-6">
     <a routerLink="/" class="shrink-0 flex items-center">
-      <img src="/logo.png" alt="Café de Barrio" class="h-14 w-auto object-contain" />
+      <img src="/logo.png" alt="Café de Barrio" class="h-10 w-auto object-contain md:h-14" />
     </a>
     <div
-      class="mx-auto flex w-full max-w-md items-center gap-2 rounded-2xl bg-neutral-50 py-1 pl-4 pr-1"
+      class="mx-auto flex w-full max-w-md items-center gap-2 rounded-2xl bg-neutral-100 py-1 pl-4 pr-1"
     >
       <input
         #searchBox
         placeholder="Buscar café, postres..."
-        class="w-full bg-transparent text-sm focus:outline-none"
+        (keydown.enter)="search(searchBox.value)"
+        class="w-full bg-transparent text-xs focus:outline-none md:text-sm"
       />
       <button
         (click)="search(searchBox.value)"
         class="cursor-pointer rounded-2xl bg-orange-500 p-2 text-white"
       >
-        <app-search-icon />
+        <app-search-icon class="size-3 md:size-5" />
       </button>
     </div>
-    <div class="flex shrink-0 items-center gap-6">
+    <div class="flex shrink-0 items-center gap-4 md:gap-6">
       <a routerLink="/cart" class="relative cursor-pointer text-neutral-500">
-        <app-cart-icon />
+        <app-cart-icon class="size-4 md:size-5" />
         @if (cart.totalCount() > 0) {
           <span
             class="absolute -right-2 -top-2 rounded-2xl bg-orange-500 px-1 text-xs text-white"

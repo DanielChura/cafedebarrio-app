@@ -1,4 +1,4 @@
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { OrderResponse, OrderState } from '../../../core/models';
@@ -6,7 +6,7 @@ import { OrderService } from '../../../core/services/order';
 
 @Component({
   selector: 'app-admin-orders',
-  imports: [FormsModule, CurrencyPipe],
+  imports: [FormsModule, CurrencyPipe, DatePipe],
   templateUrl: './admin-orders.html',
 })
 export class AdminOrders {

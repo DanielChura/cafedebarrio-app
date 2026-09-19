@@ -1,9 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { UserResponse } from '../../../core/models';
 import { UserService } from '../../../core/services/user';
+import { TrashIcon } from '../../../shared/icons/trash-icon';
 
 @Component({
   selector: 'app-admin-users',
+  imports: [TrashIcon],
   templateUrl: './admin-users.html',
 })
 export class AdminUsers {

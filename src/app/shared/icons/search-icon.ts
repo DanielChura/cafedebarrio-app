@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-search-icon',
@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
     viewBox="0 0 24 24"
     stroke-width="1.5"
     stroke="currentColor"
-    class="size-5"
+    class="{{ class() }}"
   >
     <path
       stroke-linecap="round"
@@ -17,4 +17,6 @@ import { Component } from '@angular/core';
     />
   </svg>`,
 })
-export class SearchIcon {}
+export class SearchIcon {
+  readonly class = input<string>('size-4 md:size-5');
+}
