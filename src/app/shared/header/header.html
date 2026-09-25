@@ -1,10 +1,11 @@
 <header class="bg-white border-b border-neutral-200 fixed w-full z-40">
   <div class="mx-auto max-w-6xl px-4 py-2 flex items-center gap-4 md:gap-6">
-    <a routerLink="/" class="shrink-0 flex items-center">
-      <img src="/logo.png" alt="Café de Barrio" class="h-10 w-auto object-contain md:h-14" />
+    <a routerLink="/" class="flex shrink-0 cursor-pointer items-center gap-2 text-green-800">
+      <app-logo-icon />
+      <span class="text-sm whitespace-nowrap">TechStore Pro</span>
     </a>
     <div
-      class="mx-auto flex w-full max-w-md items-center gap-2 rounded-2xl bg-neutral-100 py-1 pl-4 pr-1"
+      class="mx-auto flex w-full max-w-md items-center gap-2 rounded-xl bg-neutral-100 py-1 pl-4 pr-1"
     >
       <input
         #searchBox
@@ -14,7 +15,7 @@
       />
       <button
         (click)="search(searchBox.value)"
-        class="cursor-pointer rounded-2xl bg-orange-500 p-2 text-white"
+        class="cursor-pointer rounded-xl bg-green-800 p-2 text-white"
       >
         <app-search-icon class="size-3 md:size-5" />
       </button>
@@ -24,7 +25,7 @@
         <app-cart-icon class="size-4 md:size-5" />
         @if (cart.totalCount() > 0) {
           <span
-            class="absolute -right-2 -top-2 rounded-2xl bg-orange-500 px-1 text-xs text-white"
+            class="absolute -right-2 -top-2 rounded-xl bg-green-800 px-1 text-[10px] text-white"
             >{{ cart.totalCount() }}</span
           >
         }

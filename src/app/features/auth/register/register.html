@@ -1,16 +1,13 @@
-<main class="flex w-full grow items-center justify-center bg-pattern min-h-screen px-4 py-16">
-  <section
-    class="w-full max-w-sm bg-white border border-neutral-200 rounded-2xl p-8 flex flex-col gap-6"
-  >
-    <div class="flex flex-col gap-2">
-      <a routerLink="/" class="self-center">
-        <img src="/logo.png" alt="Café de Barrio" class="h-14 w-auto object-contain" />
-      </a>
-      <div class="flex flex-col gap-1">
-        <h1 class="text-2xl text-neutral-900">Crear cuenta</h1>
-        <p class="text-sm text-neutral-500">Únete a Café de Barrio y pide más rápido.</p>
+<main class="flex min-h-screen w-full items-center justify-center bg-white p-4 sm:p-6 md:p-8">
+  <div class="flex w-full max-w-sm flex-col gap-4">
+    <div class="flex flex-col gap-1 text-center mb-2">
+      <div class="flex justify-center mb-2">
+        <app-logo-icon />
       </div>
+      <h1 class="text-2xl text-neutral-900">¡Crea tu cuenta!</h1>
+      <p class="text-sm text-neutral-500">Introduce tus datos para crear tu cuenta.</p>
     </div>
+
     <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
       <div class="flex flex-col gap-2">
         <label for="name" class="text-sm text-neutral-900">Nombre</label>
@@ -20,26 +17,28 @@
           formControlName="name"
           autocomplete="name"
           placeholder="Tu nombre"
-          class="w-full border border-neutral-200 focus:bg-neutral-100 rounded-2xl px-4 py-2.5 text-sm placeholder:text-neutral-500 focus:outline-none"
+          class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm placeholder:text-neutral-500 focus:outline-none"
         />
         @if (form.controls.name.touched && form.controls.name.invalid) {
-          <p class="text-sm text-orange-500">Ingresa tu nombre.</p>
+          <p class="text-sm text-red-500">Introduce tu nombre.</p>
         }
       </div>
+
       <div class="flex flex-col gap-2">
-        <label for="email" class="text-sm text-neutral-900">Correo</label>
+        <label for="email" class="text-sm text-neutral-900">Email</label>
         <input
           id="email"
           type="email"
           formControlName="email"
           autocomplete="email"
-          placeholder="tu@correo.com"
-          class="w-full border border-neutral-200 focus:bg-neutral-100 rounded-2xl px-4 py-2.5 text-sm placeholder:text-neutral-500 focus:outline-none"
+          placeholder="tucorreo@gmail.com"
+          class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm placeholder:text-neutral-500 focus:outline-none"
         />
         @if (form.controls.email.touched && form.controls.email.invalid) {
-          <p class="text-sm text-orange-500">Ingresa un correo válido.</p>
+          <p class="text-sm text-red-500">Introduce un correo válido.</p>
         }
       </div>
+
       <div class="flex flex-col gap-2">
         <label for="password" class="text-sm text-neutral-900">Contraseña</label>
         <input
@@ -48,29 +47,43 @@
           formControlName="password"
           autocomplete="new-password"
           placeholder="••••••••"
-          class="w-full border border-neutral-200 focus:bg-neutral-100 rounded-2xl px-4 py-2.5 text-sm placeholder:text-neutral-500 focus:outline-none"
+          class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm placeholder:text-neutral-500 focus:outline-none"
         />
         @if (form.controls.password.touched && form.controls.password.hasError('required')) {
-          <p class="text-sm text-orange-500">Ingresa una contraseña.</p>
+          <p class="text-sm text-red-500">Introduce tu contraseña.</p>
         }
         @if (form.controls.password.touched && form.controls.password.hasError('minlength')) {
-          <p class="text-sm text-orange-500">Mínimo 6 caracteres.</p>
+          <p class="text-sm text-red-500">Mínimo 6 caracteres.</p>
         }
       </div>
-      @if (error()) {
-        <p class="text-sm text-orange-500">{{ error() }}</p>
-      }
+
       <button
         type="submit"
         [disabled]="loading()"
-        class="w-full cursor-pointer rounded-2xl bg-orange-500 px-4 py-2.5 text-sm text-white"
+        class="w-full cursor-pointer rounded-xl bg-green-800 px-4 py-2.5 text-sm text-white hover:bg-green-800 disabled:pointer-events-none"
       >
-        {{ loading() ? 'Creando cuenta...' : 'Registrarme' }}
+        {{ loading() ? 'Creando cuenta...' : 'Crear cuenta' }}
       </button>
     </form>
-    <p class="text-sm text-neutral-500">
+
+    <div class="flex items-center gap-4">
+      <span class="h-px flex-1 bg-neutral-200"></span>
+      <span class="text-sm text-neutral-500">o</span>
+      <span class="h-px flex-1 bg-neutral-200"></span>
+    </div>
+
+    <button
+      type="button"
+      (click)="google()"
+      class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-100 px-4 py-2.5 text-sm text-neutral-900"
+    >
+      <app-google-icon class="size-4" />
+      Continuar con Google
+    </button>
+
+    <p class="text-center text-sm text-neutral-500">
       ¿Ya tienes cuenta?
-      <a routerLink="/login" class="text-orange-500">Inicia sesión</a>
+      <a routerLink="/login" class="text-green-800 hover:underline">Inicia sesión</a>
     </p>
-  </section>
+  </div>
 </main>

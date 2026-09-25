@@ -44,8 +44,7 @@ export const routes: Routes = [
       },
       {
         path: 'usuarios',
-        loadComponent: () =>
-          import('./features/admin/users/admin-users').then((c) => c.AdminUsers),
+        loadComponent: () => import('./features/admin/users/admin-users').then((c) => c.AdminUsers),
       },
       {
         path: 'ordenes',
@@ -55,8 +54,10 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'admin/products',
-    redirectTo: 'admin/productos',
+    path: 'oauth/callback',
+    loadComponent() {
+      return import('./core/callback/callback').then((c) => c.Callback);
+    },
   },
   {
     path: 'login',

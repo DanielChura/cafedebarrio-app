@@ -1,17 +1,19 @@
-<main class="flex flex-col gap-12">
-  <app-promo-banner
-    imageUrl="https://pedidosya.dhmedia.io/image/pedidosya/only-home-squad/web-promotions-banners/bank-promotions-latam.png"
-    alt="Disfruta de tu café en CafeDeBarrio"
-  />
+<main class="flex flex-col gap-8">
+  <app-promo-banner imageUrl="/banner.webp" alt="Disfruta de tu café en techstorepro" />
 
-  <app-category-row [category]="hotDrinks" />
-  <app-category-row [category]="coldDrinks" />
+  <div class="flex gap-2 overflow-x-auto">
+    @for (c of allCategories(); track c.id) {
+      <a
+        [routerLink]="['/catalog']"
+        [queryParams]="{ category: c.id }"
+        class="shrink-0 cursor-pointer rounded-xl bg-neutral-100 px-4 py-2 text-sm text-neutral-500"
+      >
+        {{ c.name }}
+      </a>
+    }
+  </div>
 
-  <app-promo-banner
-    imageUrl="https://pedidosya.dhmedia.io/image/pedidosya/only-home-squad/web-promotions-banners/food-promotions-latam.png"
-    alt="Variedades de café de especialidad"
-  />
-
-  <app-category-row [category]="coldDrinks" />
-  <app-category-row [category]="hotDrinks" />
+  @for (c of allCategories(); track c.id) {
+    <app-category-row [category]="c" />
+  }
 </main>

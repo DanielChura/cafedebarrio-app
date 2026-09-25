@@ -2,7 +2,7 @@ import { CurrencyPipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { CartItem } from '../../../core/models';
+import { CartItemResponse } from '../../../core/models';
 import { AuthService } from '../../../core/services/auth';
 import { CartService } from '../../../core/services/cart';
 
@@ -26,16 +26,25 @@ export class Cart {
     address: ['', Validators.required],
   });
 
-  increase(item: CartItem): void {
-    this.cart.updateQuantity(item.product.id, item.quantity + 1);
+  constructor() {
+    if (this.auth.isLoggedIn()) this.cart.load();
   }
 
-  decrease(item: CartItem): void {
-    this.cart.updateQuantity(item.product.id, item.quantity - 1);
+  isLoggedIn(): boolean {
+    return this.auth.isLoggedIn();
+  }
+
+  increase(item: CartItemResponse): void {
+    this.cart.updateQuantity(item.productId, item.quantity + 1).subscribe();
+  }
+
+  decrease(item: CartItemResponse): void {
+    if (item.quantity - 1 <= 0) this.remove(item.productId);
+    else this.cart.updateQuantity(item.productId, item.quantity - 1).subscribe();
   }
 
   remove(productId: string): void {
-    this.cart.removeProduct(productId);
+    this.cart.removeProduct(productId).subscribe();
   }
 
   submit(): void {
@@ -48,26 +57,23 @@ export class Cart {
       this.error.set('Ingresa tu teléfono y dirección de entrega.');
       return;
     }
-    const userId = this.auth.getUserId();
-    if (userId === null) {
+    if (!this.auth.isLoggedIn()) {
       this.router.navigateByUrl('/login');
       return;
     }
     const { phone, address } = this.form.getRawValue();
     this.error.set('');
     this.loading.set(true);
-    this.cart
-      .checkout({ userId, phone: phone.trim(), address: address.trim() })
-      .subscribe({
-        next: () => {
-          this.loading.set(false);
-          this.confirmed.set(true);
-        },
-        error: () => {
-          this.loading.set(false);
-          this.error.set('No pudimos enviar tu pedido. Intenta de nuevo.');
-        },
-      });
+    this.cart.checkout({ phone: phone.trim(), address: address.trim() }).subscribe({
+      next: () => {
+        this.loading.set(false);
+        this.confirmed.set(true);
+      },
+      error: () => {
+        this.loading.set(false);
+        this.error.set('No pudimos enviar tu pedido. Intenta de nuevo.');
+      },
+    });
   }
 
   closeConfirmation(): void {

@@ -1,24 +1,40 @@
-<article class="flex flex-col gap-2">
+<article
+  class="w-full flex flex-col gap-2 rounded-xl border border-neutral-200 p-4 main-transition hover:shadow-lg"
+>
   <a [routerLink]="['/product', product().id]" class="block">
     @if (product().imageUrl) {
       <img
         [src]="product().imageUrl"
         [alt]="product().name"
-        class="w-full aspect-square object-cover rounded-xl bg-neutral-100"
+        class="w-full aspect-square object-cover rounded-lg bg-neutral-100"
       />
     } @else {
-      <div class="w-full aspect-square rounded-2xl bg-neutral-100"></div>
+      <div class="w-full aspect-square rounded-xl bg-neutral-100"></div>
     }
   </a>
   <div class="flex flex-col align-bottom gap-1">
+    <p class="text-[13px] text-neutral-500 uppercase">{{ product().categoryName }}</p>
     <a [routerLink]="['/product', product().id]">
-      <h3 class="text-base text-neutral-900">{{ product().name }}</h3>
+      <h3 class="text-base text-neutral-900 line-clamp-2">{{ product().name }}</h3>
     </a>
-    <div class="flex items-center justify-between gap-2">
-      <p class="text-sm text-orange-500">
+    <div class="flex flex-row gap-2">
+      <div class="flex items-center gap-1">
+        @for (star of stars; track star) {
+          <app-star-icon
+            [class]="
+              'size-3 md:size-4 ' + (star <= filledStars() ? 'text-yellow-300' : 'text-neutral-300')
+            "
+          />
+        }
+      </div>
+      <span class="text-xs text-neutral-300">({{ product().reviewCount ?? 0 }})</span>
+    </div>
+
+    <div class="flex items-center justify-between gap-2 mt-3">
+      <p class="text-normal text-neutral-700">
         {{ product().price | currency: 'PEN' : 'S/ ' : '1.2-2' }}
       </p>
-      <button (click)="add()" class="cursor-pointer rounded-full bg-orange-500 p-1 text-white">
+      <button (click)="add()" class="cursor-pointer rounded-md bg-green-800 px-1.5 py-1 text-white">
         <app-add-icon class="size-4" />
       </button>
     </div>

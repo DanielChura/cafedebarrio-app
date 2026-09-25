@@ -3,10 +3,10 @@
     <div class="flex flex-1 flex-col gap-4">
       @if (me(); as user) {
         <p class="text-xl text-neutral-900">
-          Hola, <span class="text-orange-500">{{ user.name }}!</span>
+          Hola, <span class="text-green-800">{{ user.name }}!</span>
         </p>
       }
-      <section class="flex flex-col gap-4 rounded-2xl border border-neutral-200 p-6 max-h-fit">
+      <section class="flex flex-col gap-4 rounded-xl border border-neutral-200 p-6 max-h-fit">
         @if (me(); as user) {
           <div class="flex flex-col gap-1">
             <p class="text-sm text-neutral-500">Correo</p>
@@ -27,7 +27,7 @@
         } @else if (loading()) {
           <p class="text-center text-sm text-neutral-500">Cargando datos...</p>
         } @else {
-          <p class="text-center text-sm text-orange-500">No pudimos cargar tus datos.</p>
+          <p class="text-center text-sm text-green-800">No pudimos cargar tus datos.</p>
         }
       </section>
     </div>
@@ -39,12 +39,12 @@
       @if (loading()) {
         <p class="text-center text-sm text-neutral-500">Cargando pedidos...</p>
       } @else if (error()) {
-        <p class="text-center text-sm text-orange-500">
+        <p class="text-center text-sm text-green-800">
           No pudimos cargar tus pedidos. Revisa tu conexión e intenta de nuevo.
         </p>
       } @else {
         @for (order of userOrders(); track order.id) {
-          <section class="flex flex-col gap-4 rounded-2xl border border-neutral-200 p-6 max-h-fit">
+          <section class="flex flex-col gap-4 rounded-xl border border-neutral-200 p-6 max-h-fit">
             <p class="text-base text-neutral-900">
               Total: {{ order.total | currency: 'PEN' : 'S/ ' : '1.2-2' }}
             </p>
@@ -55,7 +55,7 @@
             </div>
             <div class="flex flex-col gap-2">
               @for (item of order.items; track item.productId) {
-                <div class="flex flex-col gap-2 rounded-2xl px-4 py-2 bg-neutral-100">
+                <div class="flex flex-col gap-2 rounded-xl px-4 py-2 bg-neutral-100">
                   <div class="flex items-center justify-between gap-4">
                     <p class="text-sm text-neutral-900">
                       {{ item.productName }} x {{ item.quantity }}
@@ -77,10 +77,10 @@
             <img
               src="/empty-state.webp"
               alt="Sin pedidos"
-              class="w-full max-w-xs rounded-2xl object-contain"
+              class="w-full max-w-xs rounded-xl object-contain"
             />
             <p class="text-sm text-neutral-500">Aún no tienes pedidos.</p>
-            <a routerLink="/catalog" class="rounded-2xl bg-orange-500 px-4 py-2 text-sm text-white"
+            <a routerLink="/catalog" class="rounded-xl bg-green-800 px-4 py-2 text-sm text-white"
               >Ver catálogo</a
             >
           </div>

@@ -2,7 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Service, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AuthResponse, AuthUser, LoginRequest, RegisterRequest, UserResponse, UserRole } from '../models';
+import {
+  AuthResponse,
+  AuthUser,
+  LoginRequest,
+  RegisterRequest,
+  UserResponse,
+  UserRole,
+} from '../models';
 
 @Service()
 export class AuthService {
@@ -15,6 +22,10 @@ export class AuthService {
 
   login(request: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, request);
+  }
+
+  loginWithGoogle(): void {
+    window.location.href = `${environment.apiUrl}/oauth2/authorization/google`;
   }
 
   me(): Observable<UserResponse> {
@@ -30,6 +41,24 @@ export class AuthService {
       role: response.role,
     };
     localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  saveSessionFromToken(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+      const response: AuthResponse = {
+        token,
+        id: payload.id,
+        name: payload.name,
+        email: payload.sub,
+        role: payload.role,
+      };
+      if (!response.id || !response.email || !response.role) return false;
+      this.saveSession(response);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   getToken(): string | null {

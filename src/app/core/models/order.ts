@@ -1,15 +1,8 @@
 export type OrderState = 'PENDING' | 'PREPARING' | 'DELIVERED';
 
-export interface OrderItemRequest {
-  productId: string;
-  quantity: number;
-}
-
 export interface OrderRequest {
-  userId: string;
   phone: string;
   address: string;
-  items: OrderItemRequest[];
 }
 
 export interface OrderStatusRequest {

@@ -1,10 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex&display=swap');
 @import 'tailwindcss';
 
-.bg-pattern {
-  background-color: #ffffff;
-  background-image: radial-gradient(circle, #ffd6a7 1.2px, transparent 1.2px);
-  background-size: 16px 16px;
+@utility main-transition {
+  transition: all 300ms ease-out;
 }
 
 body {

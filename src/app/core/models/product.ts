@@ -5,7 +5,7 @@ export interface ProductRequest {
   description?: string;
   price: number;
   stock: number;
-  imageUrl?: string;
+  image?: File;
   categoryId: string;
 }
 
@@ -19,6 +19,8 @@ export interface ProductResponse {
   active: boolean;
   categoryId: string;
   categoryName: string;
+  averageRating?: number;
+  reviewCount?: number;
 }
 
 export interface ProductFilters extends PageParams {

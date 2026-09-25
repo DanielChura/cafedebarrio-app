@@ -7,32 +7,40 @@
         <img
           [src]="item.imageUrl"
           [alt]="item.name"
-          class="w-full aspect-square rounded-2xl bg-neutral-100 object-cover md:max-w-md"
+          class="w-full aspect-square rounded-xl bg-neutral-100 object-cover md:max-w-md"
         />
       } @else {
-        <div class="w-full aspect-square rounded-2xl bg-neutral-100 md:max-w-md"></div>
+        <div class="w-full aspect-square rounded-xl bg-neutral-100 md:max-w-md"></div>
       }
       <div class="flex flex-1 flex-col gap-4">
         <p class="text-sm text-neutral-500">{{ item.categoryName }}</p>
         <p class="text-2xl text-neutral-900">{{ item.name }}</p>
+        @if (item.reviewCount) {
+          <p class="text-sm text-neutral-500">
+            {{ item.averageRating }}/5 · {{ item.reviewCount }}
+            {{ item.reviewCount === 1 ? 'reseña' : 'reseñas' }}
+          </p>
+        } @else {
+          <p class="text-sm text-neutral-500">Sin reseñas todavía</p>
+        }
         @if (item.description) {
           <p class="text-sm text-neutral-500">{{ item.description }}</p>
         }
-        <p class="text-base text-orange-500">
+        <p class="text-base text-green-800">
           {{ item.price | currency: 'PEN' : 'S/ ' : '1.2-2' }}
         </p>
         <p class="text-sm text-neutral-500">Stock: {{ item.stock }}</p>
         <div class="flex items-center gap-2">
           <button
             (click)="decrease()"
-            class="cursor-pointer rounded-2xl bg-neutral-100 px-4 py-2 text-sm text-neutral-900"
+            class="cursor-pointer rounded-xl bg-neutral-100 px-4 py-2 text-sm text-neutral-900"
           >
             -
           </button>
           <span class="text-sm text-neutral-900">{{ quantity() }}</span>
           <button
             (click)="increase()"
-            class="cursor-pointer rounded-2xl bg-neutral-100 px-4 py-2 text-sm text-neutral-900"
+            class="cursor-pointer rounded-xl bg-neutral-100 px-4 py-2 text-sm text-neutral-900"
           >
             +
           </button>
@@ -42,21 +50,88 @@
         </p>
         <button
           (click)="add()"
-          class="cursor-pointer rounded-2xl bg-orange-500 px-4 py-2 text-sm text-white"
+          class="cursor-pointer rounded-xl bg-green-800 px-4 py-2 text-sm text-white"
         >
           Agregar al carrito
         </button>
       </div>
     </div>
+
+    <section class="mt-8 flex flex-col gap-4">
+      <p class="text-lg text-neutral-900">Reseñas</p>
+      @if (isLoggedIn()) {
+        <form [formGroup]="reviewForm" (ngSubmit)="submitReview()" class="flex flex-col gap-4">
+          <select
+            formControlName="rating"
+            class="w-full rounded-xl bg-neutral-100 px-4 py-2 text-sm text-neutral-900 focus:outline-none md:max-w-xs"
+          >
+            <option [value]="5">5/5</option>
+            <option [value]="4">4/5</option>
+            <option [value]="3">3/5</option>
+            <option [value]="2">2/5</option>
+            <option [value]="1">1/5</option>
+          </select>
+          <textarea
+            formControlName="comment"
+            rows="3"
+            maxlength="500"
+            placeholder="Cuéntanos qué te pareció (opcional)"
+            class="w-full rounded-xl bg-neutral-100 px-4 py-2 text-sm text-neutral-900 focus:outline-none"
+          ></textarea>
+          @if (reviewError()) {
+            <p class="text-sm text-green-800">{{ reviewError() }}</p>
+          }
+          <button
+            type="submit"
+            [disabled]="sending()"
+            class="cursor-pointer rounded-xl bg-green-800 px-4 py-2 text-sm text-white md:max-w-xs"
+          >
+            {{ sending() ? 'Enviando...' : 'Enviar reseña' }}
+          </button>
+        </form>
+      } @else {
+        <a routerLink="/login" class="text-sm text-green-800"
+          >Inicia sesión para dejar una reseña</a
+        >
+      }
+      @if (reviewsLoading()) {
+        <p class="text-sm text-neutral-500">Cargando reseñas...</p>
+      } @else if (items().length === 0) {
+        <p class="text-sm text-neutral-500">Este producto aún no tiene reseñas.</p>
+      } @else {
+        @for (review of items(); track review.id) {
+          <article class="flex flex-col gap-1 rounded-xl bg-neutral-50 p-4">
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-sm text-neutral-900">{{ review.userName }}</p>
+              <p class="text-sm text-green-800">{{ review.rating }}/5</p>
+            </div>
+            @if (review.comment) {
+              <p class="text-sm text-neutral-500">{{ review.comment }}</p>
+            }
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-sm text-neutral-500">{{ review.createdAt | date: 'short' }}</p>
+              @if (isAdmin()) {
+                <button
+                  (click)="removeReview(review.id)"
+                  class="cursor-pointer text-sm text-neutral-500"
+                >
+                  Eliminar
+                </button>
+              }
+            </div>
+          </article>
+        }
+      }
+    </section>
   } @else {
     <div class="flex flex-col items-center justify-center gap-4 text-center">
       <img
         src="/empty-state.webp"
         alt="Producto no encontrado"
-        class="w-full max-w-xs rounded-2xl object-contain"
+        class="w-full max-w-xs rounded-xl object-contain"
       />
-      <p class="text-sm text-orange-500">No pudimos cargar este producto.</p>
-      <a routerLink="/catalog" class="rounded-2xl bg-orange-500 px-4 py-2 text-sm text-white"
+      <p class="text-sm text-green-800">No pudimos cargar este producto.</p>
+      <a routerLink="/catalog" class="rounded-xl bg-green-800 px-4 py-2 text-sm text-white"
         >Volver al catálogo</a
       >
     </div>

@@ -1,14 +1,36 @@
 @if (items().length > 0) {
-  <section class="flex flex-col gap-6">
+  <section class="flex flex-col gap-6 relative w-full overflow-hidden">
     <div class="flex items-center justify-between gap-6">
-      <h2 class="text-xl text-neutral-900">
-        {{ category().name }}
+      <h2 class="text-xl font-bold text-neutral-900">
+        Lo mejor de {{ category().name }}
       </h2>
-      <a routerLink="/catalog" class="text-sm text-orange-500">Ver todo</a>
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          (click)="scroll(-1)"
+          aria-label="Anterior"
+          class="cursor-pointer rounded-full border border-neutral-200 p-2 text-sm text-neutral-900"
+        >
+          <app-arrow-left />
+        </button>
+        <button
+          type="button"
+          (click)="scroll(1)"
+          aria-label="Siguiente"
+          class="cursor-pointer rounded-full border border-neutral-200 p-2 text-sm text-neutral-900"
+        >
+          <app-arrow-right />
+        </button>
+      </div>
     </div>
-    <div class="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-5">
+    <div
+      #track
+      class="flex flex-row gap-4 overflow-auto snap-x snap-mandatory scroll-smooth scrollbar-none"
+    >
       @for (p of items(); track p.id) {
-        <app-product-card [product]="p" />
+        <div class="w-[calc(25%-12px)] shrink-0 snap-start">
+          <app-product-card [product]="p" />
+        </div>
       }
     </div>
   </section>

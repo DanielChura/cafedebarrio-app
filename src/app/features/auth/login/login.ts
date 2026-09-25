@@ -3,18 +3,19 @@ import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth';
 import { LoginRequest } from '../../../core/models';
+import { GoogleIcon } from '../../../shared/icons/google-icon';
+import { LogoIcon } from '../../../shared/icons/logo-icon';
 
 @Component({
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [RouterLink, ReactiveFormsModule, GoogleIcon, LogoIcon],
   selector: 'app-login',
   templateUrl: './login.html',
 })
 export class Login {
-  private readonly auth = inject(AuthService);
+  readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
-  readonly error = signal('');
   readonly loading = signal(false);
 
   readonly form = this.formBuilder.group({
@@ -22,15 +23,17 @@ export class Login {
     password: ['', Validators.required],
   });
 
+  google(): void {
+    this.auth.loginWithGoogle();
+  }
+
   submit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.error.set('Ingresa tu correo y contraseña.');
       return;
     }
     const formValue = this.form.getRawValue();
     const request: LoginRequest = { email: formValue.email.trim(), password: formValue.password };
-    this.error.set('');
     this.loading.set(true);
     this.auth.login(request).subscribe({
       next: (response) => {
@@ -39,7 +42,6 @@ export class Login {
       },
       error: () => {
         this.loading.set(false);
-        this.error.set('No pudimos iniciar sesión. Revisa tus datos.');
       },
     });
   }

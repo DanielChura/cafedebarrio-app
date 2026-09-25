@@ -1,5 +1,10 @@
 import { Component, effect, inject, input, output } from '@angular/core';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import { CategoryResponse, ProductRequest, ProductResponse } from '../../../../core/models';
 
 @Component({
@@ -17,13 +22,14 @@ export class ProductForm {
   readonly submitted = output<ProductRequest>();
   readonly cancelled = output<void>();
 
+  readonly image = new FormControl<File | null>(null);
+
   readonly form = this.fb.group({
     name: ['', Validators.required],
     price: [0, [Validators.required, Validators.min(0.01)]],
     stock: [0, [Validators.required, Validators.min(0)]],
     categoryId: ['', Validators.required],
     description: ['', Validators.required],
-    imageUrl: ['', [Validators.required, Validators.pattern(/^https?:\/\/[^\s/$.?#].[^\s]*$/)]],
   });
 
   constructor() {
@@ -37,9 +43,12 @@ export class ProductForm {
             stock: item.stock,
             categoryId: item.categoryId,
             description: item.description ?? '',
-            imageUrl: item.imageUrl ?? '',
           });
         else this.form.reset();
+        this.image.reset();
+        if (item) this.image.clearValidators();
+        else this.image.setValidators(Validators.required);
+        this.image.updateValueAndValidity();
       },
       { allowSignalWrites: true },
     );
@@ -53,19 +62,32 @@ export class ProductForm {
     );
   }
 
+  onFile(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0] ?? null;
+    this.image.setValue(file);
+    this.image.markAsTouched();
+  }
+
   save(): void {
-    if (this.form.invalid) {
+    const isEdit = !!this.initial();
+    if (this.form.invalid || (!isEdit && this.image.invalid)) {
       this.form.markAllAsTouched();
+      this.image.markAsTouched();
       return;
     }
     const v = this.form.getRawValue();
+    const image = this.image.value;
+    if (!isEdit && !image) {
+      this.image.markAsTouched();
+      return;
+    }
     this.submitted.emit({
       name: v.name.trim(),
       price: Number(v.price),
       stock: Number(v.stock),
       categoryId: v.categoryId,
       description: v.description.trim(),
-      imageUrl: v.imageUrl.trim(),
+      ...(image ? { image } : {}),
     });
   }
 }

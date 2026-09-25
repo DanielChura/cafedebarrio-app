@@ -1,24 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { CategoryResponse } from '../../../core/models/category';
+import { CategoryService } from '../../../core/services/category';
 import { CategoryRow } from '../components/category-row/category-row';
 import { PromoBanner } from '../components/promo-banner/promo-banner';
 
-const HOT_DRINKS_ID = '808fec6f-53d6-4f1f-b5a0-a66d75b687c1';
-const COLD_DRINKS_ID = '54dcaba6-d44a-4297-a2b7-1e562e1d261e';
-
 @Component({
   selector: 'app-home',
-  imports: [CategoryRow, PromoBanner],
+  imports: [CategoryRow, PromoBanner, RouterLink],
   templateUrl: './home.html',
 })
 export class Home {
-  readonly hotDrinks = {
-    id: HOT_DRINKS_ID,
-    name: 'Bebidas calientes',
-  } as CategoryResponse;
+  private readonly categories = inject(CategoryService);
 
-  readonly coldDrinks = {
-    id: COLD_DRINKS_ID,
-    name: 'Bebidas frías',
-  } as CategoryResponse;
+  readonly allCategories = signal<CategoryResponse[]>([]);
+
+  constructor() {
+    this.categories.findAll({ size: 50 }).subscribe({
+      next: (page) => this.allCategories.set(page.content),
+    });
+  }
 }

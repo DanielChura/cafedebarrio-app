@@ -1,106 +1,52 @@
+import { HttpClient } from '@angular/common/http';
 import { Service, computed, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import {
-  CartItem,
-  OrderItemRequest,
-  OrderRequest,
-  OrderResponse,
-  ProductResponse,
-} from '../models';
+import { environment } from '../../../environments/environment';
+import { CartItemRequest, CartResponse, OrderRequest, OrderResponse } from '../models';
 import { OrderService } from './order';
-
-const STORAGE_KEY = 'cafe_cart';
 
 @Service()
 export class CartService {
+  private readonly http = inject(HttpClient);
   private readonly orderService = inject(OrderService);
+  private readonly apiUrl = `${environment.apiUrl}/cart`;
 
-  readonly items = signal<CartItem[]>(this.loadFromStorage());
+  readonly cart = signal<CartResponse | null>(null);
 
+  readonly items = computed(() => this.cart()?.items ?? []);
   readonly totalCount = computed(() =>
     this.items().reduce((total, item) => total + item.quantity, 0),
   );
+  readonly totalPrice = computed(() => this.cart()?.total ?? 0);
 
-  readonly totalPrice = computed(() =>
-    this.items().reduce((total, item) => total + item.product.price * item.quantity, 0),
-  );
-
-  addProduct(product: ProductResponse, quantity = 1): void {
-    if (quantity <= 0) return;
-
-    this.items.update((current) => {
-      const existing = current.find((item) => item.product.id === product.id);
-      let updated: CartItem[];
-
-      if (existing) {
-        updated = current.map((item) =>
-          item.product.id === product.id ? { ...item, quantity: item.quantity + quantity } : item,
-        );
-      } else {
-        updated = [...current, { product, quantity }];
-      }
-
-      this.saveToStorage(updated);
-      return updated;
+  load(): void {
+    this.http.get<CartResponse>(this.apiUrl).subscribe({
+      next: (cart) => this.cart.set(cart),
+      error: () => this.cart.set(null),
     });
   }
 
-  updateQuantity(productId: string, quantity: number): void {
-    if (quantity <= 0) {
-      this.removeProduct(productId);
-      return;
-    }
-
-    this.items.update((current) => {
-      const updated = current.map((item) =>
-        item.product.id === productId ? { ...item, quantity } : item,
-      );
-      this.saveToStorage(updated);
-      return updated;
-    });
+  addItem(productId: string, quantity = 1): Observable<CartResponse> {
+    const request: CartItemRequest = { productId, quantity };
+    return this.http
+      .post<CartResponse>(`${this.apiUrl}/items`, request)
+      .pipe(tap((cart) => this.cart.set(cart)));
   }
 
-  removeProduct(productId: string): void {
-    this.items.update((current) => {
-      const updated = current.filter((item) => item.product.id !== productId);
-      this.saveToStorage(updated);
-      return updated;
-    });
+  updateQuantity(productId: string, quantity: number): Observable<CartResponse> {
+    const request: CartItemRequest = { productId, quantity };
+    return this.http
+      .put<CartResponse>(`${this.apiUrl}/items`, request)
+      .pipe(tap((cart) => this.cart.set(cart)));
   }
 
-  clear(): void {
-    this.items.set([]);
-    localStorage.removeItem(STORAGE_KEY);
+  removeProduct(productId: string): Observable<CartResponse> {
+    return this.http
+      .delete<CartResponse>(`${this.apiUrl}/items/${productId}`)
+      .pipe(tap((cart) => this.cart.set(cart)));
   }
 
-  toOrderItems(): OrderItemRequest[] {
-    return this.items().map((item) => ({
-      productId: item.product.id,
-      quantity: item.quantity,
-    }));
-  }
-
-  checkout(data: { userId: string; phone: string; address: string }): Observable<OrderResponse> {
-    const request: OrderRequest = {
-      userId: data.userId,
-      phone: data.phone,
-      address: data.address,
-      items: this.toOrderItems(),
-    };
-
-    return this.orderService.create(request).pipe(tap(() => this.clear()));
-  }
-
-  private loadFromStorage(): CartItem[] {
-    try {
-      const data = localStorage.getItem(STORAGE_KEY);
-      return data ? (JSON.parse(data) as CartItem[]) : [];
-    } catch {
-      return [];
-    }
-  }
-
-  private saveToStorage(items: CartItem[]): void {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  checkout(request: OrderRequest): Observable<OrderResponse> {
+    return this.orderService.create(request).pipe(tap(() => this.load()));
   }
 }

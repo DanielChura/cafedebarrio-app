@@ -3,12 +3,12 @@
     @if (loading()) {
       <p class="text-center text-sm text-neutral-500">Cargando productos...</p>
     } @else if (error()) {
-      <p class="text-center text-sm text-orange-500">No pudimos cargar los productos. Revisa tu conexión e intenta de nuevo.</p>
+      <p class="text-center text-sm text-green-800">
+        No pudimos cargar los productos. Revisa tu conexión e intenta de nuevo.
+      </p>
     } @else {
       @for (item of items(); track item.id) {
-        <section
-          class="flex flex-wrap items-center gap-4 rounded-2xl border border-neutral-200 p-6"
-        >
+        <section class="flex flex-wrap items-center gap-4 rounded-xl border border-neutral-200 p-6">
           <div class="flex w-full flex-col gap-1">
             <p class="text-sm text-neutral-900">{{ item.name }}</p>
             <p class="text-sm text-neutral-500">{{ item.categoryName }}</p>
@@ -24,7 +24,7 @@
           <img
             src="/empty-state.webp"
             alt="Sin productos"
-            class="w-full max-w-xs rounded-2xl object-contain"
+            class="w-full max-w-xs rounded-xl object-contain"
           />
           <p class="text-sm text-neutral-500">Aún no hay productos.</p>
         </div>

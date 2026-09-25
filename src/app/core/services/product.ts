@@ -4,6 +4,17 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Page, ProductRequest, ProductResponse, ProductFilters, toHttpParams } from '../models';
 
+function toFormData(request: ProductRequest): FormData {
+  const form = new FormData();
+  form.append('name', request.name);
+  if (request.description) form.append('description', request.description);
+  form.append('price', String(request.price));
+  form.append('stock', String(request.stock));
+  if (request.image) form.append('image', request.image);
+  form.append('categoryId', request.categoryId);
+  return form;
+}
+
 @Service()
 export class ProductService {
   private readonly http = inject(HttpClient);
@@ -18,11 +29,11 @@ export class ProductService {
   }
 
   create(request: ProductRequest): Observable<ProductResponse> {
-    return this.http.post<ProductResponse>(this.apiUrl, request);
+    return this.http.post<ProductResponse>(this.apiUrl, toFormData(request));
   }
 
   update(id: string, request: ProductRequest): Observable<ProductResponse> {
-    return this.http.put<ProductResponse>(`${this.apiUrl}/${id}`, request);
+    return this.http.put<ProductResponse>(`${this.apiUrl}/${id}`, toFormData(request));
   }
 
   delete(id: string): Observable<void> {

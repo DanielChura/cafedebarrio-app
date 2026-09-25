@@ -4,11 +4,12 @@ import { AuthService } from '../../core/services/auth';
 import { CartService } from '../../core/services/cart';
 import { AccountMenu } from '../account-menu/account-menu';
 import { CartIcon } from '../icons/cart-icon';
+import { LogoIcon } from '../icons/logo-icon';
 import { SearchIcon } from '../icons/search-icon';
 import { UserIcon } from '../icons/user-icon';
 
 @Component({
-  imports: [RouterLink, AccountMenu, CartIcon, SearchIcon, UserIcon],
+  imports: [RouterLink, AccountMenu, CartIcon, LogoIcon, SearchIcon, UserIcon],
   selector: 'app-header',
   templateUrl: './header.html',
 })
@@ -18,6 +19,10 @@ export class Header {
   readonly cart = inject(CartService);
 
   readonly menuOpen = signal(false);
+
+  constructor() {
+    if (this.auth.isLoggedIn()) this.cart.load();
+  }
 
   search(term: string): void {
     this.router.navigate(['/catalog'], { queryParams: term ? { q: term } : {} });

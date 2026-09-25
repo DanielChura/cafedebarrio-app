@@ -10,6 +10,8 @@ export interface RegisterRequest {
   email: string;
   password: string;
   role?: UserRole;
+  address?: string;
+  phone?: string;
 }
 
 export interface UserRequest {
@@ -17,6 +19,8 @@ export interface UserRequest {
   email: string;
   password: string;
   role: UserRole;
+  address?: string;
+  phone?: string;
 }
 
 export interface AuthUser {
@@ -31,5 +35,7 @@ export interface AuthResponse extends AuthUser {
 }
 
 export interface UserResponse extends AuthUser {
+  address?: string;
+  phone?: string;
   createdAt: string;
 }

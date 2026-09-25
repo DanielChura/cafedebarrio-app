@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "cafedebarrio-app": {
+    "techstorepro-app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -62,10 +62,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "cafedebarrio-app:build:production"
+              "buildTarget": "techstorepro-app:build:production"
             },
             "development": {
-              "buildTarget": "cafedebarrio-app:build:development"
+              "buildTarget": "techstorepro-app:build:development"
             }
           },
           "defaultConfiguration": "development"
