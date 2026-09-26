@@ -1,7 +1,7 @@
 <main class="py-8">
   <div class="flex flex-col gap-4">
     @if (loading()) {
-      <p class="text-center text-sm text-neutral-500">Cargando productos...</p>
+      <p class="text-center text-sm text-neutral-600">Cargando productos...</p>
     } @else if (error()) {
       <p class="text-center text-sm text-green-800">
         No pudimos cargar los productos. Revisa tu conexión e intenta de nuevo.
@@ -10,14 +10,14 @@
       @for (item of items(); track item.id) {
         <section class="flex flex-wrap items-center gap-4 rounded-xl border border-neutral-200 p-6">
           <div class="flex w-full flex-col gap-1">
-            <p class="text-sm text-neutral-900">{{ item.name }}</p>
-            <p class="text-sm text-neutral-500">{{ item.categoryName }}</p>
+            <p class="text-sm text-neutral-800">{{ item.name }}</p>
+            <p class="text-sm text-neutral-600">{{ item.categoryName }}</p>
           </div>
-          <p class="text-sm text-neutral-900">
+          <p class="text-sm text-neutral-800">
             {{ item.price | currency: 'PEN' : 'S/ ' : '1.2-2' }}
           </p>
-          <p class="text-sm text-neutral-500">Stock: {{ item.stock }}</p>
-          <p class="text-sm text-neutral-500">{{ item.active ? 'Activo' : 'Inactivo' }}</p>
+          <p class="text-sm text-neutral-600">Stock: {{ item.stock }}</p>
+          <p class="text-sm text-neutral-600">{{ item.active ? 'Activo' : 'Inactivo' }}</p>
         </section>
       } @empty {
         <div class="flex flex-col items-center justify-center gap-4 text-center">
@@ -26,7 +26,7 @@
             alt="Sin productos"
             class="w-full max-w-xs rounded-xl object-contain"
           />
-          <p class="text-sm text-neutral-500">Aún no hay productos.</p>
+          <p class="text-sm text-neutral-600">Aún no hay productos.</p>
         </div>
       }
     }

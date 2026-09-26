@@ -1,73 +1,88 @@
 <form
   [formGroup]="form"
   (ngSubmit)="save()"
-  (click)="$event.stopPropagation()"
-  class="flex max-h-screen w-full max-w-lg flex-col gap-2 overflow-y-auto rounded-xl border border-neutral-200 bg-white p-6"
+  class="flex max-h-screen w-full max-w-lg flex-col gap-4 overflow-y-auto rounded-xl border border-neutral-200 bg-white p-6"
 >
-  <p class="text-base text-neutral-900">
+  <h2 class="text-base text-neutral-800">
     {{ initial() ? 'Editar producto' : 'Nuevo producto' }}
-  </p>
-  <input
-    formControlName="name"
-    placeholder="Nombre"
-    class="w-full rounded-xl border border-neutral-200 bg-white p-4 text-sm text-neutral-900"
-  />
-  @if (form.controls.name.invalid && (form.controls.name.touched || form.controls.name.dirty)) {
-    <p class="text-sm text-green-800">Ingresa el nombre.</p>
-  }
+  </h2>
+  <div class="flex flex-col gap-2">
+    <label for="product-name" class="text-sm text-neutral-800">Nombre</label>
+    <input
+      id="product-name"
+      formControlName="name"
+      placeholder="Nombre"
+      class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
+    />
+    @if (form.controls.name.invalid && (form.controls.name.touched || form.controls.name.dirty)) {
+      <p class="text-sm text-red-500">Ingresa el nombre.</p>
+    }
+  </div>
   <div class="flex gap-2">
     <div class="flex w-full flex-col gap-2">
+      <label for="product-price" class="text-sm text-neutral-800">Precio</label>
       <input
+        id="product-price"
         type="number"
         formControlName="price"
         placeholder="Precio"
-        class="w-full rounded-xl border border-neutral-200 bg-white p-4 text-sm text-neutral-900"
+        class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
       />
       @if (
         form.controls.price.invalid && (form.controls.price.touched || form.controls.price.dirty)
       ) {
-        <p class="text-sm text-green-800">Precio mayor a 0.</p>
+        <p class="text-sm text-red-500">Precio mayor a 0.</p>
       }
     </div>
     <div class="flex w-full flex-col gap-2">
+      <label for="product-stock" class="text-sm text-neutral-800">Stock</label>
       <input
+        id="product-stock"
         type="number"
         formControlName="stock"
         placeholder="Stock"
-        class="w-full rounded-xl border border-neutral-200 bg-white p-4 text-sm text-neutral-900"
+        class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
       />
       @if (
         form.controls.stock.invalid && (form.controls.stock.touched || form.controls.stock.dirty)
       ) {
-        <p class="text-sm text-green-800">Stock 0 o más.</p>
+        <p class="text-sm text-red-500">Stock 0 o más.</p>
       }
     </div>
   </div>
-  <select
-    formControlName="categoryId"
-    class="w-full rounded-xl border border-neutral-200 bg-white p-4 text-sm text-neutral-900"
-  >
-    @for (c of categories(); track c.id) {
-      <option [value]="c.id">{{ c.name }}</option>
+  <div class="flex flex-col gap-2">
+    <label for="product-category" class="text-sm text-neutral-800">Categoría</label>
+    <select
+      id="product-category"
+      formControlName="categoryId"
+      class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 focus:outline-none"
+    >
+      @for (c of categories(); track c.id) {
+        <option [value]="c.id">{{ c.name }}</option>
+      }
+    </select>
+    @if (
+      form.controls.categoryId.invalid &&
+      (form.controls.categoryId.touched || form.controls.categoryId.dirty)
+    ) {
+      <p class="text-sm text-red-500">Elige una categoría.</p>
     }
-  </select>
-  @if (
-    form.controls.categoryId.invalid &&
-    (form.controls.categoryId.touched || form.controls.categoryId.dirty)
-  ) {
-    <p class="text-sm text-green-800">Elige una categoría.</p>
-  }
-  <input
-    formControlName="description"
-    placeholder="Descripción"
-    class="w-full rounded-xl border border-neutral-200 bg-white p-4 text-sm text-neutral-900"
-  />
-  @if (
-    form.controls.description.invalid &&
-    (form.controls.description.touched || form.controls.description.dirty)
-  ) {
-    <p class="text-sm text-green-800">Ingresa una descripción.</p>
-  }
+  </div>
+  <div class="flex flex-col gap-2">
+    <label for="product-description" class="text-sm text-neutral-800">Descripción</label>
+    <input
+      id="product-description"
+      formControlName="description"
+      placeholder="Descripción"
+      class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
+    />
+    @if (
+      form.controls.description.invalid &&
+      (form.controls.description.touched || form.controls.description.dirty)
+    ) {
+      <p class="text-sm text-red-500">Ingresa una descripción.</p>
+    }
+  </div>
   @if (initial()?.imageUrl) {
     <div class="flex items-center gap-2">
       <img
@@ -75,30 +90,34 @@
         alt="Imagen actual"
         class="h-16 w-16 rounded-xl object-cover"
       />
-      <p class="text-sm text-neutral-500">Imagen actual. Sube una nueva para reemplazarla.</p>
+      <p class="text-sm text-neutral-600">Imagen actual. Sube una nueva para reemplazarla.</p>
     </div>
   }
-  <input
-    type="file"
-    accept="image/*"
-    (change)="onFile($event)"
-    class="w-full rounded-xl border border-neutral-200 bg-white p-4 text-sm text-neutral-500"
-  />
-  @if (image.invalid && (image.touched || image.dirty)) {
-    <p class="text-sm text-green-800">Sube una imagen.</p>
-  }
+  <div class="flex flex-col gap-2">
+    <label for="product-image" class="text-sm text-neutral-800">Imagen</label>
+    <input
+      id="product-image"
+      type="file"
+      accept="image/*"
+      (change)="onFile($event)"
+      class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-600 focus:outline-none"
+    />
+    @if (image.invalid && (image.touched || image.dirty)) {
+      <p class="text-sm text-red-500">Sube una imagen.</p>
+    }
+  </div>
   <div class="flex justify-end gap-2">
     <button
       type="button"
       (click)="cancelled.emit()"
-      class="cursor-pointer rounded-xl border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-500"
+      class="cursor-pointer rounded-xl border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-600"
     >
       Cancelar
     </button>
     <button
       type="submit"
       [disabled]="saving()"
-      class="cursor-pointer rounded-xl bg-green-800 px-4 py-2 text-sm text-white"
+      class="cursor-pointer rounded-xl bg-green-800 px-4 py-2 text-sm text-white disabled:pointer-events-none"
     >
       {{ initial() ? 'Guardar' : 'Crear' }}
     </button>

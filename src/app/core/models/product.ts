@@ -2,10 +2,19 @@ import { PageParams } from './page';
 
 export interface ProductRequest {
   name: string;
-  description?: string;
+  description: string;
   price: number;
   stock: number;
   image?: File;
+  categoryId: string;
+}
+
+export interface UpdateProductRequest {
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  image?: File | null;
   categoryId: string;
 }
 

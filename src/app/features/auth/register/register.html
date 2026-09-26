@@ -4,20 +4,20 @@
       <div class="flex justify-center mb-2">
         <app-logo-icon />
       </div>
-      <h1 class="text-2xl text-neutral-900">¡Crea tu cuenta!</h1>
-      <p class="text-sm text-neutral-500">Introduce tus datos para crear tu cuenta.</p>
+      <h1 class="text-2xl text-neutral-800">¡Crea tu cuenta!</h1>
+      <p class="text-sm text-neutral-600">Introduce tus datos para crear tu cuenta.</p>
     </div>
 
     <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
       <div class="flex flex-col gap-2">
-        <label for="name" class="text-sm text-neutral-900">Nombre</label>
+        <label for="name" class="text-sm text-neutral-800">Nombre</label>
         <input
           id="name"
           type="text"
           formControlName="name"
           autocomplete="name"
           placeholder="Tu nombre"
-          class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm placeholder:text-neutral-500 focus:outline-none"
+          class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
         />
         @if (form.controls.name.touched && form.controls.name.invalid) {
           <p class="text-sm text-red-500">Introduce tu nombre.</p>
@@ -25,14 +25,14 @@
       </div>
 
       <div class="flex flex-col gap-2">
-        <label for="email" class="text-sm text-neutral-900">Email</label>
+        <label for="email" class="text-sm text-neutral-800">Email</label>
         <input
           id="email"
           type="email"
           formControlName="email"
           autocomplete="email"
           placeholder="tucorreo@gmail.com"
-          class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm placeholder:text-neutral-500 focus:outline-none"
+          class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
         />
         @if (form.controls.email.touched && form.controls.email.invalid) {
           <p class="text-sm text-red-500">Introduce un correo válido.</p>
@@ -40,14 +40,14 @@
       </div>
 
       <div class="flex flex-col gap-2">
-        <label for="password" class="text-sm text-neutral-900">Contraseña</label>
+        <label for="password" class="text-sm text-neutral-800">Contraseña</label>
         <input
           id="password"
           type="password"
           formControlName="password"
           autocomplete="new-password"
           placeholder="••••••••"
-          class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm placeholder:text-neutral-500 focus:outline-none"
+          class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
         />
         @if (form.controls.password.touched && form.controls.password.hasError('required')) {
           <p class="text-sm text-red-500">Introduce tu contraseña.</p>
@@ -60,7 +60,7 @@
       <button
         type="submit"
         [disabled]="loading()"
-        class="w-full cursor-pointer rounded-xl bg-green-800 px-4 py-2.5 text-sm text-white hover:bg-green-800 disabled:pointer-events-none"
+        class="w-full cursor-pointer rounded-xl bg-green-800 px-4 py-2.5 text-sm text-white disabled:pointer-events-none"
       >
         {{ loading() ? 'Creando cuenta...' : 'Crear cuenta' }}
       </button>
@@ -68,20 +68,20 @@
 
     <div class="flex items-center gap-4">
       <span class="h-px flex-1 bg-neutral-200"></span>
-      <span class="text-sm text-neutral-500">o</span>
+      <span class="text-sm text-neutral-600">o</span>
       <span class="h-px flex-1 bg-neutral-200"></span>
     </div>
 
     <button
       type="button"
       (click)="google()"
-      class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-100 px-4 py-2.5 text-sm text-neutral-900"
+      class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 px-4 py-2.5 text-sm text-neutral-800"
     >
       <app-google-icon class="size-4" />
       Continuar con Google
     </button>
 
-    <p class="text-center text-sm text-neutral-500">
+    <p class="text-center text-sm text-neutral-600">
       ¿Ya tienes cuenta?
       <a routerLink="/login" class="text-green-800 hover:underline">Inicia sesión</a>
     </p>

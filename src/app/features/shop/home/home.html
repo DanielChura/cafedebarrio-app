@@ -1,12 +1,18 @@
 <main class="flex flex-col gap-8">
   <app-promo-banner imageUrl="/banner.webp" alt="Disfruta de tu café en techstorepro" />
 
-  <div class="flex gap-2 overflow-x-auto">
+  <div class="flex gap-2 overflow-x-auto scrollbar-none py-1">
+    <a
+      [routerLink]="['/catalog']"
+      class="shrink-0 cursor-pointer capitalize rounded-2xl px-4 py-2 text-sm bg-green-800 text-white"
+    >
+      Ver todo
+    </a>
     @for (c of allCategories(); track c.id) {
       <a
         [routerLink]="['/catalog']"
         [queryParams]="{ category: c.id }"
-        class="shrink-0 cursor-pointer rounded-xl bg-neutral-100 px-4 py-2 text-sm text-neutral-500"
+        class="shrink-0 cursor-pointer capitalize rounded-2xl px-4 py-2 text-sm bg-neutral-50 text-neutral-600"
       >
         {{ c.name }}
       </a>

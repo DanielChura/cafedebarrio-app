@@ -1,41 +1,57 @@
 <header class="bg-white border-b border-neutral-200 fixed w-full z-40">
-  <div class="mx-auto max-w-6xl px-4 py-2 flex items-center gap-4 md:gap-6">
-    <a routerLink="/" class="flex shrink-0 cursor-pointer items-center gap-2 text-green-800">
+  <div class="mx-auto max-w-6xl px-4 py-3 flex items-center gap-4 md:gap-6">
+    <a routerLink="/" class="flex shrink-0 cursor-pointer items-center gap-3 text-neutral-800">
       <app-logo-icon />
-      <span class="text-sm whitespace-nowrap">TechStore Pro</span>
+      <span class="hidden sm:inline text-sm text-green-800 font-medium">TechStore Pro</span>
     </a>
     <div
-      class="mx-auto flex w-full max-w-md items-center gap-2 rounded-xl bg-neutral-100 py-1 pl-4 pr-1"
+      class="mx-auto flex w-full max-w-md items-center gap-3 rounded-2xl bg-neutral-50 px-4 py-2"
     >
-      <input
-        #searchBox
-        placeholder="Buscar café, postres..."
-        (keydown.enter)="search(searchBox.value)"
-        class="w-full bg-transparent text-xs focus:outline-none md:text-sm"
-      />
       <button
         (click)="search(searchBox.value)"
-        class="cursor-pointer rounded-xl bg-green-800 p-2 text-white"
+        aria-label="Search"
+        class="cursor-pointer text-neutral-600"
       >
-        <app-search-icon class="size-3 md:size-5" />
+        <app-search-icon class="size-4 md:size-5" />
       </button>
+      <input
+        #searchBox
+        placeholder="Search laptops, phones..."
+        (keydown.enter)="search(searchBox.value)"
+        class="w-full bg-transparent text-xs placeholder:text-neutral-600 focus:outline-none md:text-sm"
+      />
     </div>
     <div class="flex shrink-0 items-center gap-4 md:gap-6">
-      <a routerLink="/cart" class="relative cursor-pointer text-neutral-500">
-        <app-cart-icon class="size-4 md:size-5" />
+      <a
+        routerLink="/catalog"
+        aria-label="Catalog"
+        class="flex cursor-pointer items-center text-neutral-800"
+      >
+        <app-category-icon class="size-5 md:size-6" />
+      </a>
+      <a
+        routerLink="/cart"
+        aria-label="Cart"
+        class="relative flex cursor-pointer items-center text-neutral-800"
+      >
+        <app-cart-icon class="size-5 md:size-6" />
         @if (cart.totalCount() > 0) {
           <span
-            class="absolute -right-2 -top-2 rounded-xl bg-green-800 px-1 text-[10px] text-white"
+            class="absolute -right-2 -top-2 rounded-full bg-green-600 px-1.5 py-0.5 text-[10px] text-white"
             >{{ cart.totalCount() }}</span
           >
         }
       </a>
-      <div class="relative">
-        <button (click)="onAccountClick()" class="cursor-pointer text-neutral-500">
-          <app-user-icon />
+      <div class="relative flex items-center">
+        <button
+          (click)="onAccountClick()"
+          aria-label="Profile"
+          class="flex cursor-pointer items-center text-neutral-800"
+        >
+          <app-user-icon class="size-5 md:size-6" />
         </button>
         @if (menuOpen()) {
-          <app-account-menu (closed)="closeMenu()" />
+          <app-account-menu class="contents" (closed)="closeMenu()" />
         }
       </div>
     </div>

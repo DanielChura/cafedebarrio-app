@@ -4,8 +4,8 @@
       <div
         class="flex w-full max-w-xs flex-col items-center justify-center gap-2 rounded-xl bg-white p-6 text-center"
       >
-        <p class="text-base text-neutral-900">¡Pedido confirmado!</p>
-        <p class="text-sm text-neutral-500">Tu compra se registró correctamente.</p>
+        <p class="text-base text-neutral-800">¡Pedido confirmado!</p>
+        <p class="text-sm text-neutral-600">Tu compra se registró correctamente.</p>
         <button
           (click)="closeConfirmation()"
           class="cursor-pointer rounded-xl bg-green-800 px-4 py-2 text-sm text-white"
@@ -22,7 +22,7 @@
         alt="Inicia sesión"
         class="w-full max-w-xs rounded-xl object-contain"
       />
-      <p class="text-sm text-neutral-500">Inicia sesión para ver tu carrito.</p>
+      <p class="text-sm text-neutral-600">Inicia sesión para ver tu carrito.</p>
       <a routerLink="/login" class="rounded-xl bg-green-800 px-4 py-2 text-sm text-white"
         >Iniciar sesión</a
       >
@@ -34,7 +34,7 @@
         alt="Carrito vacío"
         class="w-full max-w-xs rounded-xl object-contain"
       />
-      <p class="text-sm text-neutral-500">Tu carrito está vacío.</p>
+      <p class="text-sm text-neutral-600">Tu carrito está vacío.</p>
       <a routerLink="/catalog" class="rounded-xl bg-green-800 px-4 py-2 text-sm text-white"
         >Ver catálogo</a
       >
@@ -42,41 +42,41 @@
   } @else {
     <div class="flex flex-col gap-6 md:flex-row">
       <div class="flex flex-2 flex-col gap-4">
-        <h1 class="text-xl text-neutral-900">
+        <h1 class="text-xl text-neutral-800">
           Mi carrito
-          <span class="text-sm text-neutral-500"> ({{ cart.totalCount() }}) </span>
+          <span class="text-sm text-neutral-600"> ({{ cart.totalCount() }}) </span>
         </h1>
         @for (item of cart.items(); track item.productId) {
           <section
             class="flex flex-row items-center gap-6 rounded-xl border border-neutral-200 p-5"
           >
             <div class="flex w-full flex-col gap-1">
-              <p class="text-sm text-neutral-900">{{ item.productName }}</p>
-              <p class="text-sm text-neutral-500">
+              <p class="text-sm text-neutral-800">{{ item.productName }}</p>
+              <p class="text-sm text-neutral-600">
                 {{ item.unitPrice | currency: 'PEN' : 'S/ ' : '1.2-2' }} c/u
               </p>
             </div>
             <div class="flex items-center gap-2">
               <button
                 (click)="decrease(item)"
-                class="cursor-pointer rounded-xl bg-neutral-100 px-2 py-1 text-sm text-neutral-900"
+                class="cursor-pointer rounded-xl bg-neutral-50 px-2 py-1 text-sm text-neutral-800"
               >
                 -
               </button>
-              <span class="text-sm text-neutral-900">{{ item.quantity }}</span>
+              <span class="text-sm text-neutral-800">{{ item.quantity }}</span>
               <button
                 (click)="increase(item)"
-                class="cursor-pointer rounded-xl bg-neutral-100 px-2 py-1 text-sm text-neutral-900"
+                class="cursor-pointer rounded-xl bg-neutral-50 px-2 py-1 text-sm text-neutral-800"
               >
                 +
               </button>
             </div>
-            <p class="text-sm text-neutral-900 flex flex-row text-start">
+            <p class="text-sm text-neutral-800 flex flex-row text-start">
               {{ item.subtotal | currency: 'PEN' : 'S/ ' : '1.2-2' }}
             </p>
             <button
               (click)="remove(item.productId)"
-              class="cursor-pointer text-sm text-neutral-500"
+              class="cursor-pointer text-sm text-neutral-600"
             >
               Quitar
             </button>
@@ -88,34 +88,42 @@
         class="flex flex-1 flex-col gap-6 rounded-xl border border-neutral-200 p-6 max-h-fit"
       >
         <div class="flex flex-row items-center justify-between gap-2">
-          <p class="text-base text-neutral-900">Total:</p>
-          <p class="text-base text-neutral-900">
+          <p class="text-base text-neutral-800">Total:</p>
+          <p class="text-base text-neutral-800">
             {{ cart.totalPrice() | currency: 'PEN' : 'S/ ' : '1.2-2' }}
           </p>
         </div>
 
         <form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-4">
-          <input
-            formControlName="phone"
-            type="tel"
-            autocomplete="tel"
-            placeholder="Teléfono"
-            class="w-full rounded-xl bg-neutral-100 px-4 py-2 text-sm text-neutral-900 focus:outline-none"
-          />
-          <input
-            formControlName="address"
-            type="text"
-            autocomplete="street-address"
-            placeholder="Dirección de entrega"
-            class="w-full rounded-xl bg-neutral-100 px-4 py-2 text-sm text-neutral-900 focus:outline-none"
-          />
+          <div class="flex flex-col gap-2">
+            <label for="phone" class="text-sm text-neutral-800">Teléfono</label>
+            <input
+              id="phone"
+              formControlName="phone"
+              type="tel"
+              autocomplete="tel"
+              placeholder="Teléfono"
+              class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
+            />
+          </div>
+          <div class="flex flex-col gap-2">
+            <label for="address" class="text-sm text-neutral-800">Dirección de entrega</label>
+            <input
+              id="address"
+              formControlName="address"
+              type="text"
+              autocomplete="street-address"
+              placeholder="Dirección de entrega"
+              class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
+            />
+          </div>
           @if (error()) {
-            <p class="text-center text-sm text-green-800">{{ error() }}</p>
+            <p class="text-center text-sm text-red-500">{{ error() }}</p>
           }
           <button
             type="submit"
             [disabled]="loading()"
-            class="cursor-pointer rounded-xl bg-green-800 px-4 py-2 text-sm text-white"
+            class="w-full cursor-pointer rounded-xl bg-green-800 px-4 py-2.5 text-sm text-white disabled:pointer-events-none"
           >
             {{ loading() ? 'Enviando...' : 'Confirmar pedido' }}
           </button>

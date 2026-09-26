@@ -14,11 +14,9 @@ export interface RegisterRequest {
   phone?: string;
 }
 
-export interface UserRequest {
+export interface UpdateUserRequest {
   name: string;
   email: string;
-  password: string;
-  role: UserRole;
   address?: string;
   phone?: string;
 }

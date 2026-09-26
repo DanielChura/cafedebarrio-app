@@ -1,20 +1,24 @@
-<footer class="bg-white border-t border-neutral-200">
+<footer class="bg-neutral-950">
   <div class="mx-auto max-w-6xl px-4 py-12 flex flex-col gap-8">
-    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-      <div class="flex flex-col">
-        <app-logo-icon />
-        <p class="text-sm text-neutral-500 max-w-sm">
-          Café de especialidad, directo de tu barrio a tu mesa.
-        </p>
+    <div class="flex flex-col gap-8 md:flex-row md:justify-between">
+      <div class="flex flex-col items-start gap-2">
+        <app-logo-icon class="size-7 text-white" />
+        <span class="text-base text-white">TechStore Pro®</span>
+        <p class="text-sm text-neutral-600">Laptops, phones and gear in one place.</p>
       </div>
-
-      <nav class="flex flex-row items-start gap-4 md:flex-col md:items-end md:gap-2">
-        <a routerLink="/" class="text-sm text-neutral-500">Inicio</a>
-        <a routerLink="/catalog" class="text-sm text-neutral-500">Catálogo</a>
-        <a routerLink="/my-orders" class="text-sm text-neutral-500 hover:text-neutral-900"
-          >Mis pedidos</a
-        >
-      </nav>
+      <div class="flex gap-8">
+        <nav class="flex flex-col gap-2">
+          <span class="text-sm text-white">Shop</span>
+          <a routerLink="/" class="text-sm text-neutral-600">Home</a>
+          <a routerLink="/catalog" class="text-sm text-neutral-600">Catalog</a>
+          <a routerLink="/cart" class="text-sm text-neutral-600">Cart</a>
+        </nav>
+        <nav class="flex flex-col gap-2">
+          <span class="text-sm text-white">Account</span>
+          <a routerLink="/my-orders" class="text-sm text-neutral-600">My orders</a>
+          <a routerLink="/login" class="text-sm text-neutral-600">Profile</a>
+        </nav>
+      </div>
     </div>
   </div>
 </footer>

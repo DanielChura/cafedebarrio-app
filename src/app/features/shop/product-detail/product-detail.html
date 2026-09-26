@@ -1,139 +1,284 @@
-<main class="py-8">
+<main class="py-6">
   @if (loading()) {
-    <p class="text-center text-sm text-neutral-500">Cargando producto...</p>
+    <div class="flex items-center justify-center py-16">
+      <p class="text-sm text-neutral-600">Cargando producto...</p>
+    </div>
   } @else if (product(); as item) {
-    <div class="flex flex-col gap-8 md:flex-row">
-      @if (item.imageUrl) {
-        <img
-          [src]="item.imageUrl"
-          [alt]="item.name"
-          class="w-full aspect-square rounded-xl bg-neutral-100 object-cover md:max-w-md"
-        />
-      } @else {
-        <div class="w-full aspect-square rounded-xl bg-neutral-100 md:max-w-md"></div>
-      }
-      <div class="flex flex-1 flex-col gap-4">
-        <p class="text-sm text-neutral-500">{{ item.categoryName }}</p>
-        <p class="text-2xl text-neutral-900">{{ item.name }}</p>
-        @if (item.reviewCount) {
-          <p class="text-sm text-neutral-500">
-            {{ item.averageRating }}/5 · {{ item.reviewCount }}
-            {{ item.reviewCount === 1 ? 'reseña' : 'reseñas' }}
-          </p>
-        } @else {
-          <p class="text-sm text-neutral-500">Sin reseñas todavía</p>
-        }
-        @if (item.description) {
-          <p class="text-sm text-neutral-500">{{ item.description }}</p>
-        }
-        <p class="text-base text-green-800">
-          {{ item.price | currency: 'PEN' : 'S/ ' : '1.2-2' }}
-        </p>
-        <p class="text-sm text-neutral-500">Stock: {{ item.stock }}</p>
-        <div class="flex items-center gap-2">
-          <button
-            (click)="decrease()"
-            class="cursor-pointer rounded-xl bg-neutral-100 px-4 py-2 text-sm text-neutral-900"
-          >
-            -
-          </button>
-          <span class="text-sm text-neutral-900">{{ quantity() }}</span>
-          <button
-            (click)="increase()"
-            class="cursor-pointer rounded-xl bg-neutral-100 px-4 py-2 text-sm text-neutral-900"
-          >
-            +
-          </button>
-        </div>
-        <p class="text-sm text-neutral-900">
-          Subtotal: {{ subtotal() | currency: 'PEN' : 'S/ ' : '1.2-2' }}
-        </p>
-        <button
-          (click)="add()"
-          class="cursor-pointer rounded-xl bg-green-800 px-4 py-2 text-sm text-white"
+    <nav class="mb-6 flex items-center gap-2 text-sm text-neutral-600">
+      <a
+        routerLink="/catalog"
+        class="flex items-center gap-1 hover:text-neutral-800 transition-all cursor-pointer"
+      >
+        <app-arrow-left />
+        <span>Volver al catálogo</span>
+      </a>
+      <span>/</span>
+      <span class="text-neutral-800">{{ item.categoryName }}</span>
+    </nav>
+
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-12">
+      <div class="flex flex-col gap-4">
+        <div
+          class="aspect-square w-full overflow-hidden rounded-xl border border-neutral-100 flex items-center justify-center"
         >
-          Agregar al carrito
-        </button>
+          @if (item.imageUrl) {
+            <img [src]="item.imageUrl" [alt]="item.name" class="h-full w-full object-contain" />
+          } @else {
+            <div
+              class="w-full h-full bg-neutral-50 flex items-center justify-center text-sm text-neutral-600"
+            >
+              Sin imagen disponible
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-6">
+        <div class="flex flex-col gap-2">
+          <p class="text-xs uppercase tracking-wider text-neutral-600">{{ item.categoryName }}</p>
+          <h1 class="text-2xl text-neutral-900 md:text-3xl">{{ item.name }}</h1>
+
+          <div class="flex items-center gap-2 mt-1">
+            <div class="flex items-center gap-1">
+              @for (star of stars; track star) {
+                <app-star-icon
+                  [class]="
+                    'size-4 ' + (star <= filledStars() ? 'text-yellow-300' : 'text-neutral-300')
+                  "
+                />
+              }
+            </div>
+            <span class="text-sm text-neutral-600">
+              {{ item.averageRating ? item.averageRating.toFixed(1) : '0.0' }}
+              ({{ item.reviewCount ?? 0 }} {{ item.reviewCount === 1 ? 'reseña' : 'reseñas' }})
+            </span>
+          </div>
+        </div>
+
+        <div class="rounded-xl border border-neutral-200 bg-white p-6 flex flex-col gap-5">
+          <div class="flex items-baseline justify-between gap-4">
+            <div class="flex flex-col gap-0.5">
+              <p class="text-xs text-neutral-600">Precio</p>
+              <p class="text-2xl text-neutral-900">
+                {{ item.price | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+              </p>
+            </div>
+            <div class="text-right flex flex-col gap-0.5">
+              <p class="text-xs text-neutral-600">Disponibilidad</p>
+              <p class="text-sm" [class]="item.stock > 0 ? 'text-green-800' : 'text-neutral-600'">
+                {{ item.stock > 0 ? item.stock + ' en stock' : 'Agotado' }}
+              </p>
+            </div>
+          </div>
+
+          @if (item.description) {
+            <div class="border-t border-neutral-200 pt-4 flex flex-col gap-1.5">
+              <p class="text-xs text-neutral-600">Descripción:</p>
+              <p class="text-sm text-neutral-800 leading-relaxed">{{ item.description }}</p>
+            </div>
+          }
+
+          @if (item.stock > 0) {
+            <div class="border-t border-neutral-200 pt-4 flex flex-col gap-4">
+              <div class="flex items-center justify-between gap-4">
+                <span class="text-sm text-neutral-800">Cantidad:</span>
+                <div
+                  class="flex items-center rounded-lg border border-neutral-200 bg-neutral-50 p-1"
+                >
+                  <button
+                    type="button"
+                    (click)="decrease()"
+                    [disabled]="quantity() <= 1"
+                    class="cursor-pointer rounded-md px-3 py-1 text-sm text-neutral-800 hover:bg-white disabled:opacity-40 transition-all"
+                    aria-label="Disminuir cantidad"
+                  >
+                    -
+                  </button>
+                  <span class="px-4 text-sm text-neutral-900">{{ quantity() }}</span>
+                  <button
+                    type="button"
+                    (click)="increase()"
+                    [disabled]="quantity() >= item.stock"
+                    class="cursor-pointer rounded-md px-3 py-1 text-sm text-neutral-800 hover:bg-white disabled:opacity-40 transition-all"
+                    aria-label="Aumentar cantidad"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between text-sm">
+                <span class="text-neutral-600">Subtotal:</span>
+                <span class="text-base text-neutral-900">
+                  {{ subtotal() | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+                </span>
+              </div>
+
+              <button
+                type="button"
+                (click)="add()"
+                class="flex items-center justify-center gap-2 cursor-pointer rounded-xl bg-green-800 px-6 py-3 text-sm text-white hover:bg-green-900 transition-all"
+              >
+                <app-cart-icon class="size-4" />
+                <span>Agregar al carrito</span>
+              </button>
+            </div>
+          } @else {
+            <div class="border-t border-neutral-200 pt-4">
+              <p class="text-sm text-neutral-600 text-center py-2">
+                Este producto no se encuentra disponible temporalmente.
+              </p>
+            </div>
+          }
+        </div>
       </div>
     </div>
 
-    <section class="mt-8 flex flex-col gap-4">
-      <p class="text-lg text-neutral-900">Reseñas</p>
-      @if (isLoggedIn()) {
-        <form [formGroup]="reviewForm" (ngSubmit)="submitReview()" class="flex flex-col gap-4">
-          <select
-            formControlName="rating"
-            class="w-full rounded-xl bg-neutral-100 px-4 py-2 text-sm text-neutral-900 focus:outline-none md:max-w-xs"
-          >
-            <option [value]="5">5/5</option>
-            <option [value]="4">4/5</option>
-            <option [value]="3">3/5</option>
-            <option [value]="2">2/5</option>
-            <option [value]="1">1/5</option>
-          </select>
-          <textarea
-            formControlName="comment"
-            rows="3"
-            maxlength="500"
-            placeholder="Cuéntanos qué te pareció (opcional)"
-            class="w-full rounded-xl bg-neutral-100 px-4 py-2 text-sm text-neutral-900 focus:outline-none"
-          ></textarea>
-          @if (reviewError()) {
-            <p class="text-sm text-green-800">{{ reviewError() }}</p>
-          }
-          <button
-            type="submit"
-            [disabled]="sending()"
-            class="cursor-pointer rounded-xl bg-green-800 px-4 py-2 text-sm text-white md:max-w-xs"
-          >
-            {{ sending() ? 'Enviando...' : 'Enviar reseña' }}
-          </button>
-        </form>
-      } @else {
-        <a routerLink="/login" class="text-sm text-green-800"
-          >Inicia sesión para dejar una reseña</a
-        >
-      }
-      @if (reviewsLoading()) {
-        <p class="text-sm text-neutral-500">Cargando reseñas...</p>
-      } @else if (items().length === 0) {
-        <p class="text-sm text-neutral-500">Este producto aún no tiene reseñas.</p>
-      } @else {
-        @for (review of items(); track review.id) {
-          <article class="flex flex-col gap-1 rounded-xl bg-neutral-50 p-4">
-            <div class="flex items-center justify-between gap-2">
-              <p class="text-sm text-neutral-900">{{ review.userName }}</p>
-              <p class="text-sm text-green-800">{{ review.rating }}/5</p>
+    <!-- Reviews Section -->
+    <section class="mt-12 flex flex-col gap-6">
+      <div class="flex items-center justify-between border-b border-neutral-200 pb-4">
+        <h2 class="text-xl text-neutral-900">Opiniones y reseñas</h2>
+        <span class="text-sm text-neutral-600">
+          {{ items().length }} {{ items().length === 1 ? 'opinión' : 'opiniones' }}
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div class="flex flex-col gap-4 md:col-span-1">
+          @if (isLoggedIn()) {
+            <form
+              [formGroup]="reviewForm"
+              (ngSubmit)="submitReview()"
+              class="flex flex-col gap-4 rounded-xl border border-neutral-200 bg-white p-6"
+            >
+              <h3 class="text-base text-neutral-900">Escribir una reseña</h3>
+              <div class="flex flex-col gap-2">
+                <label for="rating" class="text-sm text-neutral-600">Calificación:</label>
+                <div class="flex flex-row gap-1">
+                  @for (star of stars; track star) {
+                    <app-star-icon
+                      (click)="reviewForm.get('rating')?.setValue(star)"
+                      [class]="
+                        'size-3 md:size-4 cursor-pointer ' +
+                        (star <= reviewForm.getRawValue().rating
+                          ? 'text-yellow-300'
+                          : 'text-neutral-300')
+                      "
+                    />
+                  }
+                </div>
+                {{ reviewForm.getRawValue().rating }}
+              </div>
+              <div class="flex flex-col gap-2">
+                <label for="comment" class="text-sm text-neutral-600">Comentario:</label>
+                <textarea
+                  id="comment"
+                  formControlName="comment"
+                  rows="3"
+                  maxlength="500"
+                  placeholder="Cuéntanos tu experiencia con el producto..."
+                  class="w-full rounded-lg border border-neutral-300 bg-white px-4 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 transition-all focus:outline-none"
+                ></textarea>
+              </div>
+              @if (reviewError()) {
+                <p class="text-sm text-red-500">{{ reviewError() }}</p>
+              }
+              <button
+                type="submit"
+                [disabled]="sending()"
+                class="cursor-pointer rounded-xl bg-green-800 px-4 py-2.5 text-sm text-white hover:bg-green-900 disabled:opacity-50 transition-all"
+              >
+                {{ sending() ? 'Publicando...' : 'Publicar reseña' }}
+              </button>
+            </form>
+          } @else {
+            <div
+              class="flex flex-col gap-3 rounded-xl border border-neutral-200 bg-neutral-50 p-6 text-center"
+            >
+              <p class="text-sm text-neutral-800">¿Compraste este producto?</p>
+              <p class="text-xs text-neutral-600">
+                Inicia sesión para compartir tu experiencia y ayudar a otros compradores.
+              </p>
+              <a
+                routerLink="/login"
+                class="cursor-pointer rounded-xl bg-green-800 px-4 py-2 text-sm text-white hover:bg-green-900 transition-all inline-block mt-1"
+              >
+                Iniciar sesión
+              </a>
             </div>
-            @if (review.comment) {
-              <p class="text-sm text-neutral-500">{{ review.comment }}</p>
-            }
-            <div class="flex items-center justify-between gap-2">
-              <p class="text-sm text-neutral-500">{{ review.createdAt | date: 'short' }}</p>
-              @if (isAdmin()) {
-                <button
-                  (click)="removeReview(review.id)"
-                  class="cursor-pointer text-sm text-neutral-500"
+          }
+        </div>
+
+        <div class="flex flex-col gap-4 md:col-span-2">
+          @if (reviewsLoading()) {
+            <p class="text-sm text-neutral-600 py-4">Cargando reseñas...</p>
+          } @else if (items().length === 0) {
+            <div
+              class="flex flex-col items-center justify-center gap-2 rounded-xl border border-neutral-200 bg-white p-8 text-center"
+            >
+              <p class="text-sm text-neutral-800">Aún no hay reseñas para este producto.</p>
+              <p class="text-xs text-neutral-600">¡Sé el primero en dejar una opinión!</p>
+            </div>
+          } @else {
+            <div class="flex flex-col gap-3">
+              @for (review of items(); track review.id) {
+                <article
+                  class="flex flex-col gap-2 rounded-xl border border-neutral-200 bg-white p-4"
                 >
-                  Eliminar
-                </button>
+                  <div class="flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                      <p class="text-sm text-neutral-900">{{ review.userName }}</p>
+                      <div class="flex items-center gap-0.5">
+                        @for (star of stars; track star) {
+                          <app-star-icon
+                            [class]="
+                              'size-3.5 ' +
+                              (star <= review.rating ? 'text-yellow-300' : 'text-neutral-300')
+                            "
+                          />
+                        }
+                      </div>
+                    </div>
+                    <span class="text-xs text-neutral-600">
+                      {{ review.createdAt | date: 'short' }}
+                    </span>
+                  </div>
+                  @if (review.comment) {
+                    <p class="text-sm text-neutral-600 leading-relaxed">{{ review.comment }}</p>
+                  }
+                  @if (isAdmin()) {
+                    <div class="flex justify-end pt-1">
+                      <button
+                        type="button"
+                        (click)="removeReview(review.id)"
+                        class="flex items-center gap-1 cursor-pointer text-xs text-neutral-600 hover:text-red-600 transition-all"
+                      >
+                        <app-trash-icon class="size-3.5" />
+                        <span>Eliminar</span>
+                      </button>
+                    </div>
+                  }
+                </article>
               }
             </div>
-          </article>
-        }
-      }
+          }
+        </div>
+      </div>
     </section>
   } @else {
-    <div class="flex flex-col items-center justify-center gap-4 text-center">
+    <div class="flex flex-col items-center justify-center gap-4 text-center py-16">
       <img
         src="/empty-state.webp"
         alt="Producto no encontrado"
         class="w-full max-w-xs rounded-xl object-contain"
       />
       <p class="text-sm text-green-800">No pudimos cargar este producto.</p>
-      <a routerLink="/catalog" class="rounded-xl bg-green-800 px-4 py-2 text-sm text-white"
-        >Volver al catálogo</a
+      <a
+        routerLink="/catalog"
+        class="cursor-pointer rounded-xl bg-green-800 px-4 py-2 text-sm text-white hover:bg-green-900 transition-all"
       >
+        Volver al catálogo
+      </a>
     </div>
   }
 </main>

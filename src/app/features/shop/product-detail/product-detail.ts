@@ -1,26 +1,37 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
-import {
-  NonNullableFormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProductResponse, ReviewResponse } from '../../../core/models';
 import { AuthService } from '../../../core/services/auth';
 import { CartService } from '../../../core/services/cart';
+import { SessionService } from '../../../core/utils/session.service';
 import { ProductService } from '../../../core/services/product';
 import { ReviewService } from '../../../core/services/review';
+import { ArrowLeft } from '../../../shared/icons/arrow-left';
+import { CartIcon } from '../../../shared/icons/cart-icon';
+import { StartIcon } from '../../../shared/icons/star-icon';
+import { TrashIcon } from '../../../shared/icons/trash-icon';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [CurrencyPipe, DatePipe, ReactiveFormsModule, RouterLink],
+  imports: [
+    CurrencyPipe,
+    DatePipe,
+    ReactiveFormsModule,
+    RouterLink,
+    StartIcon,
+    ArrowLeft,
+    CartIcon,
+    TrashIcon,
+  ],
   templateUrl: './product-detail.html',
 })
 export class ProductDetail {
   private readonly products = inject(ProductService);
   private readonly cart = inject(CartService);
   private readonly auth = inject(AuthService);
+  private readonly session = inject(SessionService);
   private readonly reviews = inject(ReviewService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -35,6 +46,11 @@ export class ProductDetail {
   readonly reviewsLoading = signal(true);
   readonly reviewError = signal('');
   readonly sending = signal(false);
+
+  readonly stars = [1, 2, 3, 4, 5];
+  readonly filledStars = computed(() =>
+    Math.min(5, Math.max(0, Math.round(this.product()?.averageRating ?? 0))),
+  );
 
   readonly reviewForm = this.formBuilder.group({
     rating: [5, [Validators.required, Validators.min(1), Validators.max(5)]],
@@ -74,7 +90,8 @@ export class ProductDetail {
   }
 
   increase(): void {
-    this.quantity.update((current) => current + 1);
+    const maxStock = this.product()?.stock ?? 1;
+    this.quantity.update((current) => Math.min(maxStock, current + 1));
   }
 
   decrease(): void {
@@ -83,11 +100,7 @@ export class ProductDetail {
 
   add(): void {
     const item = this.product();
-    if (!item) return;
-    if (!this.auth.isLoggedIn()) {
-      this.router.navigateByUrl('/login');
-      return;
-    }
+    if (!item || !this.session.requireLogin()) return;
     this.cart.addItem(item.id, this.quantity()).subscribe({
       next: () => this.router.navigateByUrl('/cart'),
     });
@@ -95,11 +108,7 @@ export class ProductDetail {
 
   submitReview(): void {
     const item = this.product();
-    if (!item) return;
-    if (!this.auth.isLoggedIn()) {
-      this.router.navigateByUrl('/login');
-      return;
-    }
+    if (!item || !this.session.requireLogin()) return;
     if (this.reviewForm.invalid) {
       this.reviewForm.markAllAsTouched();
       this.reviewError.set('Elige una calificación entre 1 y 5.');

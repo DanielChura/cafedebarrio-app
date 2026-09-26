@@ -3,7 +3,7 @@
     <button
       (click)="selectCategory(undefined)"
       class="shrink-0 cursor-pointer rounded-xl px-4 py-2 text-sm {{
-        categoryId() === undefined ? 'bg-green-800 text-white' : 'bg-neutral-100 text-neutral-500'
+        categoryId() === undefined ? 'bg-green-800 text-white' : 'bg-neutral-50 text-neutral-600'
       }}"
     >
       Todo
@@ -14,7 +14,7 @@
         class="shrink-0 cursor-pointer rounded-xl px-4 py-2 text-sm {{
           categoryId() === category.id
             ? 'bg-green-800 text-white'
-            : 'bg-neutral-100 text-neutral-500'
+            : 'bg-neutral-50 text-neutral-600'
         }}"
       >
         {{ category.name }}
@@ -27,13 +27,13 @@
       <app-product-card [product]="product" />
     } @empty {
       @if (loading()) {
-        <p class="text-sm text-neutral-500 col-span-2 md:col-span-4">Cargando productos...</p>
+        <p class="text-sm text-neutral-600 col-span-2 md:col-span-4">Cargando productos...</p>
       } @else if (error()) {
         <p class="text-sm text-green-800 col-span-2 md:col-span-4">
           No pudimos cargar los productos. Revisa tu conexión e intenta de nuevo.
         </p>
       } @else {
-        <p class="text-sm text-neutral-500 col-span-2 md:col-span-4">Sin resultados.</p>
+        <p class="text-sm text-neutral-600 col-span-2 md:col-span-4">Sin resultados.</p>
       }
     }
   </div>

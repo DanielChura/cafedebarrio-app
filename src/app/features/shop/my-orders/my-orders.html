@@ -1,91 +1,174 @@
-<main class="py-8">
-  <div class="flex flex-col gap-6 md:flex-row">
-    <div class="flex flex-1 flex-col gap-4">
-      @if (me(); as user) {
-        <p class="text-xl text-neutral-900">
+<main class="flex flex-col gap-6 md:flex-row py-4">
+  <section class="flex flex-1 flex-col gap-4">
+    @if (me(); as user) {
+      <div class="flex items-center justify-between gap-4">
+        <h2 class="text-xl text-neutral-900">
           Hola, <span class="text-green-800">{{ user.name }}!</span>
-        </p>
-      }
-      <section class="flex flex-col gap-4 rounded-xl border border-neutral-200 p-6 max-h-fit">
-        @if (me(); as user) {
-          <div class="flex flex-col gap-1">
-            <p class="text-sm text-neutral-500">Correo</p>
-            <p class="text-sm text-neutral-900">{{ user.email }}</p>
-          </div>
-          <div class="flex flex-col gap-1">
-            <p class="text-sm text-neutral-500">Rol</p>
-            <p class="text-sm text-neutral-900">{{ user.role }}</p>
-          </div>
-          <div class="flex flex-col gap-1">
-            <p class="text-sm text-neutral-500">Miembro desde</p>
-            <p class="text-sm text-neutral-900">{{ user.createdAt | date: 'short' }}</p>
-          </div>
-          <div class="flex flex-col gap-1">
-            <p class="text-sm text-neutral-500">ID</p>
-            <p class="text-sm text-neutral-500 break-all">{{ user.id }}</p>
-          </div>
-        } @else if (loading()) {
-          <p class="text-center text-sm text-neutral-500">Cargando datos...</p>
-        } @else {
-          <p class="text-center text-sm text-green-800">No pudimos cargar tus datos.</p>
-        }
-      </section>
-    </div>
-    <div class="flex flex-2 flex-col gap-4">
-      <h1 class="text-xl text-neutral-900">
-        Mis órdenes
-        <span class="text-sm text-neutral-500"> ({{ userOrders().length }}) </span>
-      </h1>
-      @if (loading()) {
-        <p class="text-center text-sm text-neutral-500">Cargando pedidos...</p>
-      } @else if (error()) {
-        <p class="text-center text-sm text-green-800">
-          No pudimos cargar tus pedidos. Revisa tu conexión e intenta de nuevo.
-        </p>
+        </h2>
+        <button
+          type="button"
+          (click)="editProfile()"
+          aria-label="Editar perfil"
+          class="cursor-pointer text-green-800 hover:opacity-80 transition-all"
+        >
+          <app-edit-icon />
+        </button>
+      </div>
+    }
+    <div class="flex flex-col gap-4 rounded-xl border border-neutral-200 p-6 max-h-fit">
+      @if (me(); as user) {
+        <div class="flex flex-col gap-1">
+          <p class="text-sm text-neutral-600">Correo electrónico:</p>
+          <p class="text-sm text-neutral-900">{{ user.email }}</p>
+        </div>
+        <div class="flex flex-col gap-1">
+          <p class="text-sm text-neutral-600">Teléfono:</p>
+          <p class="text-sm text-neutral-900">{{ user.phone || 'Sin teléfono registrado' }}</p>
+        </div>
+        <div class="flex flex-col gap-1">
+          <p class="text-sm text-neutral-600">Dirección de entrega:</p>
+          <p class="text-sm text-neutral-900">{{ user.address || 'Sin dirección registrada' }}</p>
+        </div>
+        <div class="flex flex-col gap-1">
+          <p class="text-sm text-neutral-600">Miembro desde:</p>
+          <p class="text-sm text-neutral-900">{{ user.createdAt | date: 'short' }}</p>
+        </div>
+        <div class="flex flex-col gap-1">
+          <p class="text-sm text-neutral-600">ID de usuario:</p>
+          <p class="text-sm text-neutral-600 break-all">{{ user.id }}</p>
+        </div>
+      } @else if (loading()) {
+        <p class="text-center text-sm text-neutral-600">Cargando datos...</p>
       } @else {
-        @for (order of userOrders(); track order.id) {
-          <section class="flex flex-col gap-4 rounded-xl border border-neutral-200 p-6 max-h-fit">
-            <p class="text-base text-neutral-900">
-              Total: {{ order.total | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+        <p class="text-center text-sm text-green-800">No pudimos cargar tus datos.</p>
+      }
+    </div>
+  </section>
+
+  <section class="flex flex-2 flex-col gap-4">
+    <h1 class="text-xl text-neutral-900">
+      Mis órdenes
+      <span class="text-sm text-neutral-600"> ({{ userOrders().length }}) </span>
+    </h1>
+    @if (loading()) {
+      <p class="text-center text-sm text-neutral-600">Cargando pedidos...</p>
+    } @else if (error()) {
+      <p class="text-center text-sm text-green-800">
+        No pudimos cargar tus pedidos. Revisa tu conexión e intenta de nuevo.
+      </p>
+    } @else {
+      @for (order of userOrders(); track order.id) {
+        <article class="flex flex-col gap-4 rounded-xl border border-neutral-200 p-6 max-h-fit">
+          <p class="text-base text-neutral-900">
+            Total: {{ order.total | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+          </p>
+          <div class="flex flex-col gap-1">
+            <p class="text-sm text-neutral-600">Fecha: {{ order.createdAt | date: 'short' }}</p>
+            <p class="text-sm text-neutral-600">Teléfono: {{ order.phone || 'Sin teléfono' }}</p>
+            <p class="text-sm text-neutral-600">
+              Dirección: {{ order.address || 'Sin dirección' }}
             </p>
-            <div class="flex flex-col gap-1">
-              <p class="text-sm text-neutral-500">Fecha: {{ order.createdAt | date: 'short' }}</p>
-              <p class="text-sm text-neutral-500">Teléfono: {{ order.phone }}</p>
-              <p class="text-sm text-neutral-500">Dirección: {{ order.address }}</p>
-            </div>
-            <div class="flex flex-col gap-2">
-              @for (item of order.items; track item.productId) {
-                <div class="flex flex-col gap-2 rounded-xl px-4 py-2 bg-neutral-100">
-                  <div class="flex items-center justify-between gap-4">
-                    <p class="text-sm text-neutral-900">
-                      {{ item.productName }} x {{ item.quantity }}
-                    </p>
-                    <p class="text-sm text-neutral-900">
-                      {{ item.subtotal | currency: 'PEN' : 'S/ ' : '1.2-2' }}
-                    </p>
-                  </div>
-                  <p class="text-sm text-neutral-500">
-                    {{ item.unitPrice | currency: 'PEN' : 'S/ ' : '1.2-2' }} c/u
+          </div>
+          <div class="flex flex-col gap-2">
+            @for (item of order.items; track item.productId) {
+              <div class="flex flex-col gap-2 rounded-lg bg-neutral-50 px-4 py-2">
+                <div class="flex items-center justify-between gap-4">
+                  <p class="text-sm text-neutral-900">
+                    {{ item.productName }} x {{ item.quantity }}
+                  </p>
+                  <p class="text-sm text-neutral-900">
+                    {{ item.subtotal | currency: 'PEN' : 'S/ ' : '1.2-2' }}
                   </p>
                 </div>
-              }
-            </div>
-            <p class="text-sm text-neutral-500 break-all">Pedido: {{ order.id }}</p>
-          </section>
-        } @empty {
-          <div class="flex flex-col items-center justify-center gap-4 text-center">
-            <img
-              src="/empty-state.webp"
-              alt="Sin pedidos"
-              class="w-full max-w-xs rounded-xl object-contain"
-            />
-            <p class="text-sm text-neutral-500">Aún no tienes pedidos.</p>
-            <a routerLink="/catalog" class="rounded-xl bg-green-800 px-4 py-2 text-sm text-white"
-              >Ver catálogo</a
-            >
+                <p class="text-sm text-neutral-600">
+                  {{ item.unitPrice | currency: 'PEN' : 'S/ ' : '1.2-2' }} c/u
+                </p>
+              </div>
+            }
           </div>
-        }
+          <p class="text-sm text-neutral-600 break-all">Pedido: {{ order.id }}</p>
+        </article>
+      } @empty {
+        <div class="flex flex-col items-center justify-center gap-4 text-center">
+          <img
+            src="/empty-state.webp"
+            alt="Sin pedidos"
+            class="w-full max-w-xs rounded-xl object-contain"
+          />
+          <p class="text-sm text-neutral-600">Aún no tienes pedidos.</p>
+          <a
+            routerLink="/catalog"
+            class="cursor-pointer rounded-lg bg-green-800 px-4 py-2 text-sm text-white hover:bg-green-900 transition-all"
+          >
+            Ver catálogo
+          </a>
+        </div>
       }
+    }
+  </section>
+
+  @if (openForm()) {
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/50 p-4"
+    >
+      <form
+        (ngSubmit)="submit()"
+        [formGroup]="form"
+        class="flex w-full max-w-md flex-col gap-4 rounded-xl border border-neutral-200 bg-white p-6"
+      >
+        <h2 class="text-base text-neutral-800">Editar perfil</h2>
+        <div class="flex flex-col gap-2">
+          <label for="name" class="text-sm text-neutral-800">Nombre</label>
+          <input
+            id="name"
+            type="text"
+            formControlName="name"
+            class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
+          />
+        </div>
+        <div class="flex flex-col gap-2">
+          <label for="email" class="text-sm text-neutral-800">Correo electrónico</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
+          />
+        </div>
+        <div class="flex flex-col gap-2">
+          <label for="address" class="text-sm text-neutral-800">Dirección</label>
+          <input
+            id="address"
+            type="text"
+            formControlName="address"
+            class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
+          />
+        </div>
+        <div class="flex flex-col gap-2">
+          <label for="phone" class="text-sm text-neutral-800">Teléfono</label>
+          <input
+            id="phone"
+            type="text"
+            formControlName="phone"
+            class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
+          />
+        </div>
+        <div class="flex justify-end gap-2">
+          <button
+            type="button"
+            (click)="cancel()"
+            class="cursor-pointer rounded-xl border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-600"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="cursor-pointer rounded-xl bg-green-800 px-4 py-2 text-sm text-white"
+          >
+            Guardar
+          </button>
+        </div>
+      </form>
     </div>
-  </div>
+  }
 </main>
