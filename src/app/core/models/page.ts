@@ -8,14 +8,12 @@ export interface Page<T> {
   totalPages?: number;
 }
 
-// Params de paginación de Spring (Pageable): ?page=&size=&sort=campo,asc
 export interface PageParams {
   page?: number;
   size?: number;
   sort?: string;
 }
 
-// Convierte un objeto de filtros a HttpParams, omitiendo undefined/null/''.
 export function toHttpParams(filters: object): HttpParams {
   let params = new HttpParams();
   for (const [key, value] of Object.entries(filters)) {

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Service, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Page, ProductRequest, ProductResponse, ProductFilters, toHttpParams } from '../models';
@@ -15,7 +15,9 @@ function toFormData(request: ProductRequest): FormData {
   return form;
 }
 
-@Service()
+@Injectable({
+  providedIn: 'root',
+})
 export class ProductService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/products`;

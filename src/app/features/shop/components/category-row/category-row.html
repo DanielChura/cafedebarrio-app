@@ -7,7 +7,7 @@
           type="button"
           (click)="scroll(-1)"
           aria-label="Anterior"
-          class="cursor-pointer rounded-2xl border border-neutral-200 p-2 text-sm text-neutral-900"
+          class="cursor-pointer rounded-full border border-neutral-200 p-2 text-sm text-neutral-900"
         >
           <app-arrow-left />
         </button>
@@ -15,7 +15,7 @@
           type="button"
           (click)="scroll(1)"
           aria-label="Siguiente"
-          class="cursor-pointer rounded-2xl border border-neutral-200 p-2 text-sm text-neutral-900"
+          class="cursor-pointer rounded-full border border-neutral-200 p-2 text-sm text-neutral-900"
         >
           <app-arrow-right />
         </button>
@@ -26,7 +26,7 @@
       class="flex flex-row gap-4 overflow-auto snap-x snap-mandatory scroll-smooth scrollbar-none pb-4"
     >
       @for (p of items(); track p.id) {
-        <div class="w-[72%] sm:w-[48%] md:w-[32%] lg:w-[calc(25%-12px)] shrink-0 snap-start">
+        <div class="w-[75%] sm:w-[50%] md:w-[33%] lg:w-[calc(25%-12px)] shrink-0 snap-start">
           <app-product-card [product]="p" />
         </div>
       }

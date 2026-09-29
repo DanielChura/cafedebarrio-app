@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Service, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
@@ -11,10 +11,14 @@ import {
   UserRole,
 } from '../models';
 
-@Service()
+@Injectable({
+  providedIn: 'root',
+})
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/auth`;
+
+  readonly user = signal<AuthUser | null>(this.getUser());
 
   register(request: RegisterRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, request);
@@ -25,7 +29,7 @@ export class AuthService {
   }
 
   loginWithGoogle(): void {
-    window.location.href = `${environment.apiUrl}/oauth2/authorization/google`;
+    window.location.href = `${environment.baseUrl}/oauth2/authorization/google`;
   }
 
   me(): Observable<UserResponse> {
@@ -41,6 +45,7 @@ export class AuthService {
       role: response.role,
     };
     localStorage.setItem('user', JSON.stringify(user));
+    this.user.set(user);
   }
 
   saveSessionFromToken(token: string): boolean {
@@ -66,15 +71,7 @@ export class AuthService {
   }
 
   getRole(): UserRole | null {
-    const savedUser = localStorage.getItem('user');
-    if (savedUser === null) {
-      return null;
-    }
-    try {
-      return (JSON.parse(savedUser) as AuthUser).role;
-    } catch {
-      return null;
-    }
+    return this.user()?.role ?? null;
   }
 
   isLoggedIn(): boolean {
@@ -100,5 +97,6 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    this.user.set(null);
   }
 }

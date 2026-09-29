@@ -1,20 +1,26 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, OnInit, effect, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CartItemResponse } from '../../../core/models';
 import { AuthService } from '../../../core/services/auth';
 import { CartService } from '../../../core/services/cart';
+import { ProductService } from '../../../core/services/product';
+import { TrashIcon } from '../../../shared/icons/trash-icon';
 
 @Component({
-  imports: [CurrencyPipe, ReactiveFormsModule, RouterLink],
+  imports: [CurrencyPipe, ReactiveFormsModule, RouterLink, TrashIcon],
   selector: 'app-cart',
   templateUrl: './cart.html',
 })
-export class Cart {
+export class Cart implements OnInit {
   readonly cart = inject(CartService);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly products = inject(ProductService);
+  private readonly attempted = new Set<string>();
+
+  readonly images = signal<Record<string, string>>({});
   private readonly formBuilder = inject(NonNullableFormBuilder);
 
   readonly error = signal('');
@@ -27,11 +33,45 @@ export class Cart {
   });
 
   constructor() {
-    if (this.auth.isLoggedIn()) this.cart.load();
+    effect(() => {
+      for (const item of this.cart.items()) {
+        if (item.imageUrl || this.images()[item.productId] || this.attempted.has(item.productId))
+          continue;
+        this.attempted.add(item.productId);
+        this.products.findById(item.productId).subscribe({
+          next: (product) => {
+            if (product.imageUrl)
+              this.images.update((images) => ({ ...images, [item.productId]: product.imageUrl! }));
+          },
+          error: () => {},
+        });
+      }
+      this.auth.me().subscribe({
+        next: (user) => {
+          this.form.patchValue({
+            phone: user.phone || '',
+            address: user.address || '',
+          });
+        },
+        error: () => {},
+      });
+    });
+  }
+
+  ngOnInit(): void {
+    this.cart.load();
+  }
+
+  imageFor(item: CartItemResponse): string | undefined {
+    return item.imageUrl ?? this.images()[item.productId];
   }
 
   isLoggedIn(): boolean {
     return this.auth.isLoggedIn();
+  }
+
+  retry(): void {
+    this.cart.load();
   }
 
   increase(item: CartItemResponse): void {

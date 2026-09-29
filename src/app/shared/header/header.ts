@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
 import { CartService } from '../../core/services/cart';
@@ -15,7 +15,7 @@ import { UserIcon } from '../icons/user-icon';
   selector: 'app-header',
   templateUrl: './header.html',
 })
-export class Header {
+export class Header implements OnInit {
   private readonly auth = inject(AuthService);
   private readonly session = inject(SessionService);
   private readonly router = inject(Router);
@@ -23,8 +23,8 @@ export class Header {
 
   readonly menuOpen = signal(false);
 
-  constructor() {
-    if (this.auth.isLoggedIn()) this.cart.load();
+  ngOnInit(): void {
+    this.cart.load();
   }
 
   search(term: string): void {

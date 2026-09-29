@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { Service, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Page, ReviewFilters, ReviewRequest, ReviewResponse, toHttpParams } from '../models';
 
-@Service()
+@Injectable({
+  providedIn: 'root',
+})
 export class ReviewService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/reviews`;

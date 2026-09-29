@@ -1,5 +1,5 @@
 <main class="flex flex-col gap-8 py-8">
-  <div class="flex gap-2 overflow-x-auto">
+  <div class="flex gap-2 overflow-x-auto scrollbar-none py-1">
     <button
       (click)="selectCategory(undefined)"
       class="shrink-0 cursor-pointer rounded-xl px-4 py-2 text-sm {{
@@ -22,18 +22,18 @@
     }
   </div>
 
-  <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
     @for (product of items(); track product.id) {
       <app-product-card [product]="product" />
     } @empty {
       @if (loading()) {
-        <p class="text-sm text-neutral-600 col-span-2 md:col-span-4">Cargando productos...</p>
+        <p class="text-sm text-neutral-600 col-span-full">Cargando productos...</p>
       } @else if (error()) {
-        <p class="text-sm text-green-800 col-span-2 md:col-span-4">
+        <p class="text-sm text-green-800 col-span-full">
           No pudimos cargar los productos. Revisa tu conexión e intenta de nuevo.
         </p>
       } @else {
-        <p class="text-sm text-neutral-600 col-span-2 md:col-span-4">Sin resultados.</p>
+        <p class="text-sm text-neutral-600 col-span-full">Sin resultados.</p>
       }
     }
   </div>
