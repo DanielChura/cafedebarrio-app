@@ -3,7 +3,7 @@
     <button
       (click)="selectCategory(undefined)"
       class="shrink-0 cursor-pointer rounded-xl px-4 py-2 text-sm {{
-        categoryId() === undefined ? 'bg-green-800 text-white' : 'bg-neutral-50 text-neutral-600'
+        categoryId() === undefined ? 'bg-neutral-800 text-white' : 'bg-neutral-50 text-neutral-600'
       }}"
     >
       Todo
@@ -13,7 +13,7 @@
         (click)="selectCategory(category.id)"
         class="shrink-0 cursor-pointer rounded-xl px-4 py-2 text-sm {{
           categoryId() === category.id
-            ? 'bg-green-800 text-white'
+            ? 'bg-neutral-800 text-white'
             : 'bg-neutral-50 text-neutral-600'
         }}"
       >
@@ -29,7 +29,7 @@
       @if (loading()) {
         <p class="text-sm text-neutral-600 col-span-full">Cargando productos...</p>
       } @else if (error()) {
-        <p class="text-sm text-green-800 col-span-full">
+        <p class="text-sm text-neutral-800 col-span-full">
           No pudimos cargar los productos. Revisa tu conexión e intenta de nuevo.
         </p>
       } @else {

@@ -24,5 +24,5 @@ import { Component, input } from '@angular/core';
   `,
 })
 export class LogoIcon {
-  readonly class = input<string>('size-6 md:size-7 text-green-800');
+  readonly class = input<string>('size-6 md:size-7 text-neutral-800');
 }

@@ -65,7 +65,7 @@
             </div>
             <div class="text-right flex flex-col gap-0.5">
               <p class="text-xs text-neutral-600">Disponibilidad</p>
-              <p class="text-sm" [class]="item.stock > 0 ? 'text-green-800' : 'text-neutral-600'">
+              <p class="text-sm" [class]="item.stock > 0 ? 'text-neutral-800' : 'text-neutral-600'">
                 {{ item.stock > 0 ? item.stock + ' en stock' : 'Agotado' }}
               </p>
             </div>
@@ -117,7 +117,7 @@
               <button
                 type="button"
                 (click)="add()"
-                class="flex items-center justify-center gap-2 cursor-pointer rounded-xl bg-green-800 px-6 py-3 text-sm text-white hover:bg-green-900 transition-all"
+                class="flex items-center justify-center gap-2 cursor-pointer rounded-xl bg-neutral-800 px-6 py-3 text-sm text-white hover:bg-neutral-900 transition-all"
               >
                 <app-cart-icon class="size-4" />
                 <span>Agregar al carrito</span>
@@ -187,7 +187,7 @@
               <button
                 type="submit"
                 [disabled]="sending()"
-                class="cursor-pointer rounded-xl bg-green-800 px-4 py-2.5 text-sm text-white hover:bg-green-900 disabled:opacity-50 transition-all"
+                class="cursor-pointer rounded-xl bg-neutral-800 px-4 py-2.5 text-sm text-white hover:bg-neutral-900 disabled:opacity-50 transition-all"
               >
                 {{ sending() ? 'Publicando...' : 'Publicar reseña' }}
               </button>
@@ -202,7 +202,7 @@
               </p>
               <a
                 routerLink="/login"
-                class="cursor-pointer rounded-xl bg-green-800 px-4 py-2 text-sm text-white hover:bg-green-900 transition-all inline-block mt-1"
+                class="cursor-pointer rounded-xl bg-neutral-800 px-4 py-2 text-sm text-white hover:bg-neutral-900 transition-all inline-block mt-1"
               >
                 Iniciar sesión
               </a>
@@ -273,10 +273,10 @@
         alt="Producto no encontrado"
         class="w-full max-w-xs rounded-xl object-contain"
       />
-      <p class="text-sm text-green-800">No pudimos cargar este producto.</p>
+      <p class="text-sm text-neutral-800">No pudimos cargar este producto.</p>
       <a
         routerLink="/catalog"
-        class="cursor-pointer rounded-xl bg-green-800 px-4 py-2 text-sm text-white hover:bg-green-900 transition-all"
+        class="cursor-pointer rounded-xl bg-neutral-800 px-4 py-2 text-sm text-white hover:bg-neutral-900 transition-all"
       >
         Volver al catálogo
       </a>

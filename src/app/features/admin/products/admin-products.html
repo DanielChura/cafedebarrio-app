@@ -6,7 +6,7 @@
     </div>
     <button
       (click)="openCreate()"
-      class="flex shrink-0 cursor-pointer items-center gap-2 rounded-xl bg-green-800 px-4 py-2 text-sm text-white"
+      class="flex shrink-0 cursor-pointer items-center gap-2 rounded-xl bg-neutral-800 px-4 py-2 text-sm text-white"
     >
       Añadir
       <app-add-icon class="size-4 text-white md:size-5" />
@@ -16,7 +16,7 @@
   @if (loading()) {
     <p class="text-xs text-neutral-600 md:text-sm">Cargando...</p>
   } @else if (error()) {
-    <p class="text-xs text-green-800 md:text-sm">
+    <p class="text-xs text-neutral-800 md:text-sm">
       No pudimos cargar los productos. Revisa tu conexión e intenta de nuevo.
     </p>
   } @else {
@@ -54,7 +54,7 @@
                   <button
                     (click)="remove(item.id)"
                     aria-label="Eliminar"
-                    class="cursor-pointer text-green-800"
+                    class="cursor-pointer text-neutral-800"
                   >
                     <app-trash-icon />
                   </button>
@@ -73,9 +73,7 @@
 </div>
 
 @if (showModal()) {
-  <div
-    class="fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/50 p-4"
-  >
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/50 p-4">
     <app-product-form
       [categories]="allCategories()"
       [initial]="editingItem()"

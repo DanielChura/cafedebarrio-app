@@ -39,15 +39,9 @@ export class CartService {
   }
 
   load(): void {
-    if (!this.auth.isLoggedIn()) {
-      this.cart.set(null);
-      this.loading.set(false);
-      this.failed.set(false);
-      return;
-    }
     this.loading.set(true);
     this.failed.set(false);
-    this.http.get<CartResponse>(this.apiUrl).subscribe({
+    this.getByUserId().subscribe({
       next: (cart) => {
         this.cart.set(cart);
         this.loading.set(false);
@@ -58,6 +52,10 @@ export class CartService {
         this.loading.set(false);
       },
     });
+  }
+
+  getByUserId(): Observable<CartResponse> {
+    return this.http.get<CartResponse>(this.apiUrl);
   }
 
   addItem(productId: string, quantity = 1): Observable<CartResponse> {

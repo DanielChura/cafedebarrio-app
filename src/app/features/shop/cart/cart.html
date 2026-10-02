@@ -2,19 +2,21 @@
   @if (confirmed()) {
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/50 p-4">
       <div
-        class="flex w-full max-w-xs flex-col items-center justify-center gap-2 rounded-xl bg-white p-6 text-center"
+        class="flex w-full max-w-xs flex-col items-center gap-2 rounded-xl bg-white p-6 text-center"
       >
         <p class="text-base text-neutral-900">¡Pedido confirmado!</p>
         <p class="text-sm text-neutral-500">Tu compra se registró correctamente.</p>
         <button
+          type="button"
           (click)="closeConfirmation()"
-          class="cursor-pointer rounded-xl bg-green-800 px-4 py-2 text-sm text-white"
+          class="cursor-pointer rounded-xl bg-neutral-800 px-4 py-2 text-sm text-white"
         >
           Aceptar
         </button>
       </div>
     </div>
   }
+
   @if (!isLoggedIn()) {
     <div class="flex flex-col items-center justify-center gap-4 text-center">
       <img
@@ -23,15 +25,15 @@
         class="w-full max-w-xs rounded-xl object-contain"
       />
       <p class="text-sm text-neutral-500">Inicia sesión para ver tu carrito.</p>
-      <a routerLink="/login" class="rounded-xl bg-green-800 px-4 py-2 text-sm text-white"
-        >Iniciar sesión</a
-      >
+      <a routerLink="/login" class="rounded-xl bg-neutral-800 px-4 py-2 text-sm text-white">
+        Iniciar sesión
+      </a>
     </div>
-  } @else if (cart.loading() && !cart.cart()) {
+  } @else if (cartService.loading() && !cartService.cart()) {
     <div class="flex flex-col items-center justify-center gap-4 py-20 text-center">
       <p class="text-sm text-neutral-500">Cargando carrito...</p>
     </div>
-  } @else if (cart.failed()) {
+  } @else if (cartService.failed()) {
     <div class="flex flex-col items-center justify-center gap-4 text-center">
       <img
         src="/empty-state.webp"
@@ -40,13 +42,14 @@
       />
       <p class="text-sm text-neutral-500">No pudimos cargar tu carrito. Intenta de nuevo.</p>
       <button
+        type="button"
         (click)="retry()"
-        class="cursor-pointer rounded-xl bg-green-800 px-4 py-2 text-sm text-white"
+        class="cursor-pointer rounded-xl bg-neutral-800 px-4 py-2 text-sm text-white"
       >
         Reintentar
       </button>
     </div>
-  } @else if (cart.items().length === 0) {
+  } @else if (cartService.items().length === 0) {
     <div class="flex flex-col items-center justify-center gap-4 text-center">
       <img
         src="/empty-state.webp"
@@ -54,53 +57,55 @@
         class="w-full max-w-xs rounded-xl object-contain"
       />
       <p class="text-sm text-neutral-500">Tu carrito está vacío.</p>
-      <a routerLink="/catalog" class="rounded-xl bg-green-800 px-4 py-2 text-sm text-white"
-        >Ver catálogo</a
-      >
+      <a routerLink="/catalog" class="rounded-xl bg-neutral-800 px-4 py-2 text-sm text-white">
+        Ver catálogo
+      </a>
     </div>
   } @else {
     <div class="grid w-full min-w-0 gap-6 md:grid-cols-3">
       <div class="flex w-full min-w-0 flex-col gap-4 md:col-span-2">
         <h1 class="text-xl text-neutral-900">
           Mi carrito
-          <span class="text-sm text-neutral-500"> ({{ cart.totalCount() }}) </span>
+          <span class="text-sm text-neutral-500"> ({{ cartService.totalCount() }}) </span>
         </h1>
-        @for (item of cart.items(); track item.productId) {
-          <section class="flex gap-4 rounded-xl border border-neutral-200 p-4">
-            @if (imageFor(item)) {
-              <img
-                [src]="imageFor(item)"
-                [alt]="item.productName"
-                class="size-20 shrink-0 rounded-xl bg-neutral-50 object-cover"
-              />
-            } @else {
-              <div class="size-20 shrink-0 rounded-xl bg-neutral-50"></div>
-            }
-            <div class="flex min-w-0 flex-1 flex-col gap-1">
-              <p class="truncate text-sm text-neutral-900">{{ item.productName }}</p>
-              <p class="text-sm text-neutral-500">
-                {{ item.unitPrice | currency: 'PEN' : 'S/ ' : '1.2-2' }} c/u
-              </p>
-              <div class="mt-2 flex items-center gap-2">
+
+        @for (item of cartService.items(); track item.productId) {
+          <article class="flex items-center gap-4 rounded-xl border border-neutral-200 p-4">
+            <img
+              [src]="item.imageUrl"
+              [alt]="item.productName"
+              class="size-16 shrink-0 rounded-xl object-cover"
+            />
+            <div class="flex min-w-0 flex-1 flex-col gap-2">
+              <div class="flex flex-col gap-1 max-w-120">
+                <p class="line-clamp-2 text-sm text-neutral-900">{{ item.productName }}</p>
+                <p class="text-sm text-neutral-500">
+                  {{ item.unitPrice | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+                </p>
+              </div>
+              <div class="flex items-center gap-1">
                 <button
+                  type="button"
                   (click)="decrease(item)"
                   aria-label="Disminuir cantidad"
-                  class="cursor-pointer rounded-xl bg-neutral-50 px-2 py-1 text-sm text-neutral-900"
+                  class="flex size-6 cursor-pointer items-center justify-center rounded-full bg-neutral-50 text-sm text-neutral-900"
                 >
                   -
                 </button>
-                <span class="text-sm text-neutral-900">{{ item.quantity }}</span>
+                <span class="w-6 text-center text-sm text-neutral-900">{{ item.quantity }}</span>
                 <button
+                  type="button"
                   (click)="increase(item)"
                   aria-label="Aumentar cantidad"
-                  class="cursor-pointer rounded-xl bg-neutral-50 px-2 py-1 text-sm text-neutral-900"
+                  class="flex size-6 cursor-pointer items-center justify-center rounded-full bg-neutral-50 text-sm text-neutral-900"
                 >
                   +
                 </button>
               </div>
             </div>
-            <div class="flex shrink-0 flex-col items-end justify-between gap-2">
+            <div class="flex shrink-0 flex-col items-end justify-between self-stretch">
               <button
+                type="button"
                 (click)="remove(item.productId)"
                 aria-label="Quitar del carrito"
                 class="cursor-pointer text-red-600"
@@ -111,17 +116,17 @@
                 {{ item.subtotal | currency: 'PEN' : 'S/ ' : '1.2-2' }}
               </p>
             </div>
-          </section>
+          </article>
         }
       </div>
 
       <section
-        class="flex w-full min-w-0 flex-col gap-6 rounded-xl border border-neutral-200 p-6 h-fit md:col-span-1"
+        class="flex h-fit w-full min-w-0 flex-col gap-6 rounded-xl border border-neutral-200 p-6"
       >
-        <div class="flex flex-row items-center justify-between gap-2">
+        <div class="flex items-center justify-between gap-2">
           <p class="text-base text-neutral-900">Total:</p>
           <p class="text-base text-neutral-900">
-            {{ cart.totalPrice() | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+            {{ cartService.totalPrice() | currency: 'PEN' : 'S/ ' : '1.2-2' }}
           </p>
         </div>
 
@@ -149,12 +154,12 @@
             />
           </div>
           @if (error()) {
-            <p class="text-center text-sm text-green-800">{{ error() }}</p>
+            <p class="text-center text-sm text-neutral-800">{{ error() }}</p>
           }
           <button
             type="submit"
             [disabled]="loading()"
-            class="w-full cursor-pointer rounded-xl bg-green-800 px-4 py-2.5 text-sm text-white disabled:pointer-events-none"
+            class="w-full cursor-pointer rounded-xl bg-neutral-800 px-4 py-2.5 text-sm text-white disabled:pointer-events-none"
           >
             {{ loading() ? 'Enviando...' : 'Confirmar pedido' }}
           </button>
