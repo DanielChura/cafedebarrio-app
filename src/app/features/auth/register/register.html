@@ -17,7 +17,7 @@
           formControlName="name"
           autocomplete="name"
           placeholder="Tu nombre"
-          class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
+          class="w-full rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
         />
         @if (form.controls.name.touched && form.controls.name.invalid) {
           <p class="text-sm text-red-500">Introduce tu nombre.</p>
@@ -32,7 +32,7 @@
           formControlName="email"
           autocomplete="email"
           placeholder="tucorreo@gmail.com"
-          class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
+          class="w-full rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
         />
         @if (form.controls.email.touched && form.controls.email.invalid) {
           <p class="text-sm text-red-500">Introduce un correo válido.</p>
@@ -47,7 +47,7 @@
           formControlName="password"
           autocomplete="new-password"
           placeholder="••••••••"
-          class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
+          class="w-full rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
         />
         @if (form.controls.password.touched && form.controls.password.hasError('required')) {
           <p class="text-sm text-red-500">Introduce tu contraseña.</p>
@@ -60,7 +60,7 @@
       <button
         type="submit"
         [disabled]="loading()"
-        class="w-full cursor-pointer rounded-xl bg-neutral-800 px-4 py-2.5 text-sm text-white disabled:pointer-events-none"
+        class="w-full cursor-pointer rounded-lg bg-neutral-800 px-4 py-2.5 text-sm text-white disabled:pointer-events-none"
       >
         {{ loading() ? 'Creando cuenta...' : 'Crear cuenta' }}
       </button>
@@ -75,7 +75,7 @@
     <button
       type="button"
       (click)="google()"
-      class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-neutral-200 bg-white hover:bg-neutral-50 px-4 py-2.5 text-sm text-neutral-800"
+      class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-neutral-200 bg-white hover:bg-neutral-100 px-4 py-2.5 text-sm text-neutral-800"
     >
       <app-google-icon class="size-4" />
       Continuar con Google

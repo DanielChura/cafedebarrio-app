@@ -1,4 +1,4 @@
-export type UserRole = 'ADMIN' | 'CUSTOMER';
+export type UserRole = 'ADMIN' | 'OPERATOR' | 'CUSTOMER';
 
 export interface LoginRequest {
   email: string;
@@ -33,7 +33,7 @@ export interface AuthResponse extends AuthUser {
 }
 
 export interface UserResponse extends AuthUser {
-  address?: string;
-  phone?: string;
+  address: string | null;
+  phone: string | null;
   createdAt: string;
 }

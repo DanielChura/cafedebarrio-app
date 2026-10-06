@@ -3,11 +3,10 @@ import { RouterLink } from '@angular/router';
 import { CategoryResponse } from '../../../core/models/category';
 import { CategoryService } from '../../../core/services/category';
 import { CategoryRow } from '../components/category-row/category-row';
-import { PromoBanner } from '../components/promo-banner/promo-banner';
 
 @Component({
   selector: 'app-home',
-  imports: [CategoryRow, PromoBanner, RouterLink],
+  imports: [CategoryRow, RouterLink],
   templateUrl: './home.html',
 })
 export class Home {

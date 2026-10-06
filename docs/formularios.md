@@ -10,15 +10,15 @@ Todo formulario del proyecto debe verse y comportarse como esos dos.
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | Borde de campo            | `border-neutral-200` (único borde permitido en forms)                                                                                       |
 | Label                     | `text-sm text-neutral-800`                                                                                                                  |
-| Input / select / textarea | `w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none` |
+| Input / select / textarea | `w-full rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none` |
 | Error de validación       | `text-sm text-red-500`                                                                                                                      |
 | Título página (auth)      | `text-2xl text-neutral-800` + subtítulo `text-sm text-neutral-600`                                                                          |
 | Título flotante           | `text-base text-neutral-800` (elemento `h2`)                                                                                                |
-| Botón primario página     | `w-full cursor-pointer rounded-xl bg-neutral-800 px-4 py-2.5 text-sm text-white`                                                            |
-| Botón primario flotante   | `cursor-pointer rounded-xl bg-neutral-800 px-4 py-2 text-sm text-white`                                                                     |
-| Botón cancelar            | `cursor-pointer rounded-xl border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-600`                                           |
+| Botón primario página     | `w-full cursor-pointer rounded-lg bg-neutral-800 px-4 py-2.5 text-sm text-white`                                                            |
+| Botón primario flotante   | `cursor-pointer rounded-lg bg-neutral-800 px-4 py-2 text-sm text-white`                                                                     |
+| Botón cancelar            | `cursor-pointer rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-600`                                           |
 | Overlay flotante          | `fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/50 p-4`                                                                 |
-| Form flotante             | `flex w-full max-w-md flex-col gap-4 rounded-xl border border-neutral-200 bg-white p-6` (`max-w-lg` solo si lleva fila de 2 columnas)       |
+| Form flotante             | `flex w-full max-w-md flex-col gap-4 rounded-lg border border-neutral-200 bg-white p-6` (`max-w-lg` solo si lleva fila de 2 columnas)       |
 
 ## Patrones
 
@@ -30,7 +30,7 @@ Campo (siempre con `label` + `for`/`id`, nunca solo `placeholder`):
   <input
     id="email"
     ...
-    class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
+    class="w-full rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
   />
   <p class="text-sm text-red-500">Introduce un correo válido.</p>
 </div>
@@ -46,7 +46,7 @@ fila de acciones al final. Solo se cierra con el botón Cancelar
 <div class="fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/50 p-4">
   <form
     (ngSubmit)="save()"
-    class="flex w-full max-w-md flex-col gap-4 rounded-xl border border-neutral-200 bg-white p-6"
+    class="flex w-full max-w-md flex-col gap-4 rounded-lg border border-neutral-200 bg-white p-6"
   >
     <h2 class="text-base text-neutral-800">Nueva categoría</h2>
     <!-- campos -->
@@ -54,13 +54,13 @@ fila de acciones al final. Solo se cierra con el botón Cancelar
       <button
         type="button"
         (click)="close()"
-        class="cursor-pointer rounded-xl border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-600"
+        class="cursor-pointer rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-600"
       >
         Cancelar
       </button>
       <button
         type="submit"
-        class="cursor-pointer rounded-xl bg-neutral-800 px-4 py-2 text-sm text-white"
+        class="cursor-pointer rounded-lg bg-neutral-800 px-4 py-2 text-sm text-white"
       >
         Crear
       </button>
@@ -75,7 +75,7 @@ fila de acciones al final. Solo se cierra con el botón Cancelar
   muerto). Si algún hover fuese necesario, solo con el token `main-transition`.
 - `(click)` en el overlay para cerrar y `$event.stopPropagation()` en el form.
   Sin excepciones: la única salida es Cancelar.
-- Otros bordes (`neutral-300`), otros radios (`rounded-lg`), `bg-neutral-50`
+- Otros bordes (`neutral-300`), otros radios (`rounded-lg`), `bg-neutral-100`
   en campos, `transition-all`, `backdrop-blur`, fondos de overlay distintos.
 - `div` + `input` sueltos donde debe haber `form` + `(ngSubmit)` + `type="submit"`.
 - `type` sin declarar en `button`, `[(ngModel)]` dentro de `form` sin `name`.

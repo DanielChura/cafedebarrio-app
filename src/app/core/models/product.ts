@@ -21,15 +21,16 @@ export interface UpdateProductRequest {
 export interface ProductResponse {
   id: string;
   name: string;
-  description?: string;
+  description: string | null;
   price: number;
   stock: number;
-  imageUrl?: string;
+  imageUrl: string | null;
+  publicId: string | null;
   active: boolean;
   categoryId: string;
   categoryName: string;
-  averageRating?: number;
-  reviewCount?: number;
+  averageRating: number | null;
+  reviewCount: number | null;
 }
 
 export interface ProductFilters extends PageParams {

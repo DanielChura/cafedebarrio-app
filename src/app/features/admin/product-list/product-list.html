@@ -8,7 +8,7 @@
       </p>
     } @else {
       @for (item of items(); track item.id) {
-        <section class="flex flex-wrap items-center gap-4 rounded-xl border border-neutral-200 p-6">
+        <section class="flex flex-wrap items-center gap-4 rounded-lg border border-neutral-200 p-6">
           <div class="flex w-full flex-col gap-1">
             <p class="text-sm text-neutral-800">{{ item.name }}</p>
             <p class="text-sm text-neutral-600">{{ item.categoryName }}</p>
@@ -24,7 +24,7 @@
           <img
             src="/empty-state.webp"
             alt="Sin productos"
-            class="w-full max-w-xs rounded-xl object-contain"
+            class="w-full max-w-xs rounded-lg object-contain"
           />
           <p class="text-sm text-neutral-600">Aún no hay productos.</p>
         </div>

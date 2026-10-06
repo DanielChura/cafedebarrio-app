@@ -5,11 +5,11 @@
     <app-logo-icon /> SoftDevoluciones
   </a>
   <nav class="flex grow flex-col gap-2">
-    @for (link of links; track link.path) {
+    @for (link of links(); track link.path) {
       <a
         [routerLink]="link.path"
         routerLinkActive="bg-neutral-800 text-white hover:text-white"
-        class="flex cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-sm text-neutral-600 hover:text-neutral-800"
+        class="flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-sm text-neutral-600 hover:text-neutral-800"
       >
         <ng-container *ngComponentOutlet="link.icon" />
         {{ link.label }}
@@ -18,7 +18,7 @@
   </nav>
   <a
     routerLink="/"
-    class="flex cursor-pointer items-center gap-3 rounded-xl bg-neutral-50 p-4 text-center text-sm text-neutral-600 hover:text-neutral-800"
+    class="flex cursor-pointer items-center gap-3 rounded-lg bg-neutral-100 p-4 text-center text-sm text-neutral-600 hover:text-neutral-800"
   >
     <app-exit-icon />
     Volver a la tienda

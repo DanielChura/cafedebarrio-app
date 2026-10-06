@@ -1,7 +1,7 @@
 <form
   [formGroup]="form"
   (ngSubmit)="save()"
-  class="flex max-h-screen w-full max-w-lg flex-col gap-4 overflow-y-auto rounded-xl border border-neutral-200 bg-white p-6"
+  class="flex max-h-screen w-full max-w-lg flex-col gap-4 overflow-y-auto rounded-lg border border-neutral-200 bg-white p-6"
 >
   <h2 class="text-base text-neutral-800">
     {{ initial() ? 'Editar producto' : 'Nuevo producto' }}
@@ -12,7 +12,7 @@
       id="product-name"
       formControlName="name"
       placeholder="Nombre"
-      class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
+      class="w-full rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
     />
     @if (form.controls.name.invalid && (form.controls.name.touched || form.controls.name.dirty)) {
       <p class="text-sm text-red-500">Ingresa el nombre.</p>
@@ -26,7 +26,7 @@
         type="number"
         formControlName="price"
         placeholder="Precio"
-        class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
+        class="w-full rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
       />
       @if (
         form.controls.price.invalid && (form.controls.price.touched || form.controls.price.dirty)
@@ -41,7 +41,7 @@
         type="number"
         formControlName="stock"
         placeholder="Stock"
-        class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
+        class="w-full rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
       />
       @if (
         form.controls.stock.invalid && (form.controls.stock.touched || form.controls.stock.dirty)
@@ -55,7 +55,7 @@
     <select
       id="product-category"
       formControlName="categoryId"
-      class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 focus:outline-none"
+      class="w-full rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 focus:outline-none"
     >
       @for (c of categories(); track c.id) {
         <option [value]="c.id">{{ c.name }}</option>
@@ -74,7 +74,7 @@
       id="product-description"
       formControlName="description"
       placeholder="Descripción"
-      class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
+      class="w-full rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
     />
     @if (
       form.controls.description.invalid &&
@@ -88,7 +88,7 @@
       <img
         [src]="initial()!.imageUrl"
         alt="Imagen actual"
-        class="h-16 w-16 rounded-xl object-cover"
+        class="h-16 w-16 rounded-lg object-cover"
       />
       <p class="text-sm text-neutral-600">Imagen actual. Sube una nueva para reemplazarla.</p>
     </div>
@@ -100,7 +100,7 @@
       type="file"
       accept="image/*"
       (change)="onFile($event)"
-      class="w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-600 focus:outline-none"
+      class="w-full rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-600 focus:outline-none"
     />
     @if (image.invalid && (image.touched || image.dirty)) {
       <p class="text-sm text-red-500">Sube una imagen.</p>
@@ -110,14 +110,14 @@
     <button
       type="button"
       (click)="cancelled.emit()"
-      class="cursor-pointer rounded-xl border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-600"
+      class="cursor-pointer rounded-lg border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-600"
     >
       Cancelar
     </button>
     <button
       type="submit"
       [disabled]="saving()"
-      class="cursor-pointer rounded-xl bg-neutral-800 px-4 py-2 text-sm text-white disabled:pointer-events-none"
+      class="cursor-pointer rounded-lg bg-neutral-800 px-4 py-2 text-sm text-white disabled:pointer-events-none"
     >
       {{ initial() ? 'Guardar' : 'Crear' }}
     </button>

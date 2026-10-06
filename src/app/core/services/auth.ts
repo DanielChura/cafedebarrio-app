@@ -71,7 +71,16 @@ export class AuthService {
   }
 
   getRole(): UserRole | null {
-    return this.user()?.role ?? null;
+    const saved = this.user()?.role ?? null;
+    if (saved) return saved;
+    try {
+      const token = this.getToken();
+      if (!token) return null;
+      const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+      return (payload.role as UserRole) ?? null;
+    } catch {
+      return null;
+    }
   }
 
   isLoggedIn(): boolean {

@@ -1,0 +1,7 @@
+@if (toast(); as item) {
+  <div class="fixed bottom-4 right-4 z-50 w-full max-w-xs">
+    <div [class]="'rounded-lg px-4 py-3 ' + bgClass(item.type)">
+      <p class="text-sm text-white">{{ item.message }}</p>
+    </div>
+  </div>
+}

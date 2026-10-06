@@ -1,0 +1,212 @@
+<div class="flex flex-col gap-8">
+  <div class="flex flex-col gap-1">
+    <h1 class="text-xl text-neutral-800 md:text-2xl">Devoluciones</h1>
+    <p class="text-xs text-neutral-600 md:text-sm">
+      Gestiona las solicitudes de devolución de los clientes.
+    </p>
+  </div>
+
+  @if (loading()) {
+    <p class="text-xs text-neutral-600 md:text-sm">Cargando...</p>
+  } @else if (error()) {
+    <p class="text-xs text-neutral-800 md:text-sm">
+      No pudimos cargar las devoluciones. Revisa tu conexión e intenta de nuevo.
+    </p>
+  } @else {
+    <div class="overflow-x-auto rounded-xl border border-neutral-200 bg-white p-5 pb-2">
+      <table class="w-full text-xs md:text-sm">
+        <thead>
+          <tr class="text-neutral-600 font-medium">
+            <td class="pb-4 pr-0">Fecha</td>
+            <td class="pb-4 pr-6">Motivo</td>
+            <td class="pb-4 pr-6">Pedido</td>
+            <td class="pb-4 pr-6">Cliente</td>
+            <td class="pb-4 pr-6 text-center">Ítems</td>
+            <td class="pb-4 pr-6">Monto</td>
+            <td class="pb-4">Estado</td>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of items(); track item.id) {
+            <tr
+              (click)="openDetail(item)"
+              class="cursor-pointer border-t border-neutral-200 text-neutral-800 hover:bg-neutral-100"
+            >
+              <td class="max-w-16 py-4 pr-6 text-neutral-600">
+                {{ item.createdAt | date: 'dd/MM/yy, HH:mm' }}
+              </td>
+              <td class="max-w-32 py-4 pr-6">
+                <p class="line-clamp-1">{{ item.reason }}</p>
+              </td>
+              <td class="max-w-32 py-4 pr-6">
+                <p class="truncate font-mono text-neutral-600">{{ item.orderId }}</p>
+              </td>
+              <td class="max-w-32 py-4 pr-6">
+                <p class="truncate font-mono text-neutral-600">{{ item.userId }}</p>
+              </td>
+              <td class="max-w-8 py-4 pr-6 text-neutral-600 text-center">
+                {{ item.items.length }}
+              </td>
+              <td class="max-w-16 py-4 pr-6">
+                {{ item.amount | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+              </td>
+              <td class="max-w-16 py-4">
+                <span [class]="'rounded-lg px-3 py-1 text-xs ' + getStatusClass(item.status)">
+                  {{ getStatusLabel(item.status) }}
+                </span>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7" class="py-4 text-neutral-600">Sin devoluciones.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  @if (selected(); as detail) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/40 p-4">
+      <div
+        class="flex max-h-[90vh] w-full max-w-md flex-col gap-4 overflow-y-auto rounded-lg bg-white p-6"
+      >
+        <h2 class="text-base text-neutral-800">Detalle de devolución</h2>
+
+        @if (detailLoading()) {
+          <p class="text-sm text-neutral-600">Cargando detalle...</p>
+        } @else {
+          <div class="flex items-center justify-between gap-4">
+            <span class="text-xs text-neutral-600">{{ detail.createdAt | date: 'medium' }}</span>
+            <span [class]="'rounded-lg px-3 py-1 text-xs ' + getStatusClass(detail.status)">
+              {{ getStatusLabel(detail.status) }}
+            </span>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <span class="text-xs text-neutral-600">Motivo</span>
+            <p class="text-sm text-neutral-800">{{ detail.reason }}</p>
+          </div>
+
+          @if (detail.comment) {
+            <div class="flex flex-col gap-1">
+              <span class="text-xs text-neutral-600">Comentario del cliente</span>
+              <p class="text-sm text-neutral-800">{{ detail.comment }}</p>
+            </div>
+          }
+
+          <div class="flex flex-col gap-1">
+            <span class="text-xs text-neutral-600">Pedido</span>
+            <p class="max-w-full truncate font-mono text-xs text-neutral-800">
+              {{ detail.orderId }}
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <span class="text-xs text-neutral-600">Cliente</span>
+            <p class="max-w-full truncate font-mono text-xs text-neutral-800">
+              {{ detail.userId }}
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <span class="text-xs text-neutral-600">Productos</span>
+            @for (item of detail.items; track item.id) {
+              <div
+                class="flex items-center justify-between gap-4 rounded-lg border border-neutral-200 p-3"
+              >
+                <div class="flex min-w-0 flex-1 flex-col gap-0.5">
+                  <p class="line-clamp-1 text-sm text-neutral-800">{{ item.productName }}</p>
+                  <p class="text-xs text-neutral-600">
+                    Cantidad: {{ item.quantity }} &bull;
+                    {{ item.unitPrice | currency: 'PEN' : 'S/ ' : '1.2-2' }} c/u
+                  </p>
+                </div>
+                <span class="shrink-0 text-sm text-neutral-800">
+                  {{ item.amount | currency: 'PEN' : 'S/ ' : '1.2-2' }}
+                </span>
+              </div>
+            }
+          </div>
+
+          <div class="flex items-baseline gap-1.5 text-xs">
+            <span class="text-neutral-600">Monto total:</span>
+            <span class="text-sm text-neutral-800">{{
+              detail.amount | currency: 'PEN' : 'S/ ' : '1.2-2'
+            }}</span>
+          </div>
+
+          @if (nextStates(detail.status).length > 0) {
+            <form [formGroup]="form" (ngSubmit)="submitStatus()" class="flex flex-col gap-4">
+              <div class="flex flex-col gap-2">
+                <label for="status" class="text-sm text-neutral-600">Nuevo estado</label>
+                <select
+                  id="status"
+                  formControlName="status"
+                  class="w-full cursor-pointer rounded-lg border border-neutral-200 bg-white px-4 py-3 text-sm text-neutral-800 focus:outline-none"
+                >
+                  <option value="" disabled>Selecciona el nuevo estado</option>
+                  @for (s of nextStates(detail.status); track s) {
+                    <option [value]="s">{{ getStatusLabel(s) }}</option>
+                  }
+                </select>
+                @if (form.controls.status.touched && form.controls.status.invalid) {
+                  <p class="text-xs text-red-500">Debes seleccionar el nuevo estado.</p>
+                }
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <label for="operatorNote" class="text-sm text-neutral-600">Nota del operador</label>
+                <textarea
+                  id="operatorNote"
+                  rows="3"
+                  formControlName="operatorNote"
+                  placeholder="Explica la decisión tomada sobre esta solicitud"
+                  class="w-full resize-none rounded-lg border border-neutral-200 bg-white px-4 py-3 text-sm text-neutral-800 placeholder:text-neutral-600 focus:outline-none"
+                ></textarea>
+                @if (form.controls.operatorNote.touched && form.controls.operatorNote.invalid) {
+                  <p class="text-xs text-red-500">
+                    La nota es obligatoria (máximo 500 caracteres).
+                  </p>
+                }
+              </div>
+
+              <div class="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  (click)="closeDetail()"
+                  class="cursor-pointer rounded-lg border border-neutral-200 px-4 py-2.5 text-sm text-neutral-600"
+                >
+                  Cerrar
+                </button>
+                <button
+                  type="submit"
+                  [disabled]="saving()"
+                  class="cursor-pointer rounded-lg bg-neutral-800 px-5 py-2.5 text-sm text-white disabled:opacity-50"
+                >
+                  {{ saving() ? 'Guardando...' : 'Guardar' }}
+                </button>
+              </div>
+            </form>
+          } @else {
+            @if (detail.operatorNote) {
+              <div class="flex flex-col gap-1">
+                <span class="text-xs text-neutral-600">Nota del operador</span>
+                <p class="text-sm text-neutral-800">{{ detail.operatorNote }}</p>
+              </div>
+            }
+            <div class="flex justify-end pt-2">
+              <button
+                type="button"
+                (click)="closeDetail()"
+                class="cursor-pointer rounded-lg border border-neutral-200 px-4 py-2.5 text-sm text-neutral-600"
+              >
+                Cerrar
+              </button>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  }
+</div>

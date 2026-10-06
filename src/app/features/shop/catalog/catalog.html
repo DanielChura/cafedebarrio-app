@@ -2,8 +2,8 @@
   <div class="flex gap-2 overflow-x-auto scrollbar-none py-1">
     <button
       (click)="selectCategory(undefined)"
-      class="shrink-0 cursor-pointer rounded-xl px-4 py-2 text-sm {{
-        categoryId() === undefined ? 'bg-neutral-800 text-white' : 'bg-neutral-50 text-neutral-600'
+      class="shrink-0 cursor-pointer rounded-lg px-4 py-2 text-sm {{
+        categoryId() === undefined ? 'bg-neutral-800 text-white' : 'bg-neutral-100 text-neutral-600'
       }}"
     >
       Todo
@@ -11,10 +11,10 @@
     @for (category of allCategories(); track category.id) {
       <button
         (click)="selectCategory(category.id)"
-        class="shrink-0 cursor-pointer rounded-xl px-4 py-2 text-sm {{
+        class="shrink-0 cursor-pointer rounded-lg px-4 py-2 text-sm {{
           categoryId() === category.id
             ? 'bg-neutral-800 text-white'
-            : 'bg-neutral-50 text-neutral-600'
+            : 'bg-neutral-100 text-neutral-600'
         }}"
       >
         {{ category.name }}

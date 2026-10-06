@@ -13,7 +13,7 @@ export interface ReviewResponse {
   productId: string;
   productName: string;
   rating: number;
-  comment?: string;
+  comment: string | null;
   createdAt: string;
 }
 

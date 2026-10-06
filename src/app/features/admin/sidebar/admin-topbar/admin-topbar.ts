@@ -16,7 +16,10 @@ export class AdminTopbar {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
 
-  readonly links = adminLinks;
+  readonly links = adminLinks.filter((link) => {
+    const role = this.auth.getRole();
+    return role ? link.roles.includes(role) : false;
+  });
   readonly open = signal(false);
 
   close(): void {

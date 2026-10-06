@@ -1,13 +1,13 @@
-<article class="w-full flex flex-col gap-2 rounded-xl border border-neutral-200 p-4">
+<article class="w-full flex flex-col gap-2 rounded-lg border border-neutral-200 p-4">
   <a [routerLink]="['/product', product().id]" class="block">
     @if (product().imageUrl) {
       <img
         [src]="product().imageUrl"
         [alt]="product().name"
-        class="w-full aspect-square object-cover rounded-xl bg-neutral-50"
+        class="w-full aspect-square object-cover rounded-lg bg-neutral-100"
       />
     } @else {
-      <div class="w-full aspect-square rounded-xl bg-neutral-50"></div>
+      <div class="w-full aspect-square rounded-lg bg-neutral-100"></div>
     }
   </a>
   <div class="flex flex-col align-bottom gap-1">
@@ -35,7 +35,7 @@
       <button
         (click)="add()"
         aria-label="Add to cart"
-        class="cursor-pointer rounded-xl bg-neutral-800 p-2 text-white"
+        class="cursor-pointer rounded-lg bg-neutral-800 p-2 text-white"
       >
         <app-add-icon class="size-4" />
       </button>

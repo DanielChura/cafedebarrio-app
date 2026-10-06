@@ -4,7 +4,9 @@
       <app-logo-icon />
       <span class="hidden sm:inline text-sm text-neutral-800 font-medium">SoftDevoluciones</span>
     </a>
-    <div class="mx-auto flex w-full max-w-md items-center gap-3 rounded-xl bg-neutral-50 px-4 py-2">
+    <div
+      class="mx-auto flex w-full max-w-md items-center gap-3 rounded-lg bg-neutral-100 px-4 py-2"
+    >
       <button
         (click)="search(searchBox.value)"
         aria-label="Search"
@@ -40,18 +42,13 @@
           >
         }
       </a>
-      <div class="relative flex items-center">
-        <button
-          (click)="onAccountClick()"
-          aria-label="Profile"
-          class="flex cursor-pointer items-center text-neutral-800"
-        >
-          <app-user-icon class="size-5 md:size-6" />
-        </button>
-        @if (menuOpen()) {
-          <app-account-menu class="contents" (closed)="closeMenu()" />
-        }
-      </div>
+      <button
+        (click)="onAccountClick()"
+        aria-label="Profile"
+        class="flex cursor-pointer items-center text-neutral-800"
+      >
+        <app-user-icon class="size-5 md:size-6" />
+      </button>
     </div>
   </div>
 </header>

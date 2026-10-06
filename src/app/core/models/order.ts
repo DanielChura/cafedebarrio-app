@@ -10,13 +10,13 @@ export interface OrderStatusRequest {
 }
 
 export interface OrderItemResponse {
-  // ponytail: id es el orderDetailId del backend; cae a productId si el backend no lo expone
-  id?: string;
+  id: string;
   productId: string;
   productName: string;
   quantity: number;
   unitPrice: number;
   subtotal: number;
+  imageUrl: string | null;
 }
 
 export interface OrderResponse {

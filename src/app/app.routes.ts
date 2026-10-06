@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { adminGuard } from './core/guards/admin-guard';
 import { authGuard } from './core/guards/auth-guard';
+import { staffGuard } from './core/guards/staff-guard';
 
 export const routes: Routes = [
   {
@@ -23,33 +24,62 @@ export const routes: Routes = [
   },
   {
     path: 'my-orders',
+    redirectTo: 'me/orders',
+  },
+  {
+    path: 'me',
     canActivate: [authGuard],
-    loadComponent: () => import('./features/shop/my-orders/my-orders').then((c) => c.MyOrders),
+    loadComponent: () => import('./features/me/me').then((c) => c.Me),
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'orders' },
+      {
+        path: 'orders',
+        loadComponent: () => import('./features/me/me-orders/me-orders').then((c) => c.MeOrders),
+      },
+      {
+        path: 'profile',
+        loadComponent: () => import('./features/me/me-profile/me-profile').then((c) => c.MeProfile),
+      },
+      {
+        path: 'returns',
+        loadComponent: () => import('./features/me/me-returns/me-returns').then((c) => c.MeReturns),
+      },
+    ],
   },
   {
     path: 'admin',
-    canActivate: [adminGuard],
+    canActivate: [staffGuard],
     loadComponent: () => import('./features/admin/admin').then((c) => c.Admin),
     children: [
-      { path: '', pathMatch: 'full', redirectTo: 'categorias' },
+      { path: '', pathMatch: 'full', redirectTo: 'ordenes' },
       {
         path: 'categorias',
+        canActivate: [adminGuard],
         loadComponent: () =>
           import('./features/admin/categories/admin-categories').then((c) => c.AdminCategories),
       },
       {
         path: 'productos',
+        canActivate: [adminGuard],
         loadComponent: () =>
           import('./features/admin/products/admin-products').then((c) => c.AdminProducts),
       },
       {
         path: 'usuarios',
+        canActivate: [adminGuard],
         loadComponent: () => import('./features/admin/users/admin-users').then((c) => c.AdminUsers),
       },
       {
         path: 'ordenes',
+        canActivate: [staffGuard],
         loadComponent: () =>
           import('./features/admin/orders/admin-orders').then((c) => c.AdminOrders),
+      },
+      {
+        path: 'devoluciones',
+        canActivate: [staffGuard],
+        loadComponent: () =>
+          import('./features/admin/returns/admin-returns').then((c) => c.AdminReturns),
       },
     ],
   },

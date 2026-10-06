@@ -13,7 +13,7 @@ export class AccountMenu {
 
   readonly closed = output<void>();
 
-  readonly isAdmin = this.auth.getRole() === 'ADMIN';
+  readonly isAdmin = this.auth.getRole() === 'ADMIN' || this.auth.getRole() === 'OPERATOR';
 
   logout(): void {
     this.auth.logout();

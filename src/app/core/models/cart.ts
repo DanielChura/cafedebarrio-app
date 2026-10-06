@@ -6,7 +6,7 @@ export interface CartItemRequest {
 export interface CartItemResponse {
   productId: string;
   productName: string;
-  imageUrl: string;
+  imageUrl: string | null;
   quantity: number;
   unitPrice: number;
   subtotal: number;
