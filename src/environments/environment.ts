@@ -1,4 +1,4 @@
 export const environment = {
-  apiUrl: 'http://localhost:8080/api',
-  baseUrl: 'http://localhost:8080',
+  apiUrl: 'https://softdevoluciones.onrender.com/api',
+  baseUrl: 'https://softdevoluciones.onrender.com',
 };
